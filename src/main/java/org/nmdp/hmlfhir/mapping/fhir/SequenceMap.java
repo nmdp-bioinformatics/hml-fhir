@@ -130,7 +130,7 @@ public class SequenceMap implements Converter<Hml, Sequences> {
     }
 
     private Sequence createSequence(String refSeqId) {
-        if (refSeqId.isEmpty() || refSeqId == null) {
+        if (refSeqId == null || refSeqId.isEmpty()) {
             return null;
         }
 

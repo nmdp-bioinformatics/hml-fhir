@@ -53,7 +53,10 @@ public class SpecimenMap implements Converter<Hml, Specimens> {
             Identifier identifier = new Identifier();
             Collection collection = new Collection();
 
-            collection.setMethod(sample.getCollectionMethods().get(0).getName());
+            if (sample.getCollectionMethods().size() > 0) {
+                collection.setMethod(sample.getCollectionMethods().get(0).getName());
+            }
+
             identifier.setValue(sample.getId());
             identifier.setSystem(sample.getCenterCode());
             specimen.setIdentifier(identifier);
