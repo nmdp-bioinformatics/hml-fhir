@@ -401,7 +401,7 @@ public class HmlDeserializer extends Deserializer implements JsonDeserializer<Hm
             consensusSequenceBlock.setPhaseSet(jsonObject.has("phaseSet") ? jsonObject.get("phaseSet").getAsString() : null);
             consensusSequenceBlock.setPhasingGroup(jsonObject.has("phasingGroup") ? jsonObject.get("phasingGroup").getAsString() : null);
             consensusSequenceBlock.setReferenceSequenceId(jsonObject.has("referenceSequenceId") ? jsonObject.get("referenceSequenceId").getAsString() : null);
-            consensusSequenceBlock.setSequence(createSequence(jsonObject.has("sequence") ? jsonObject.get("sequence").getAsString() : null));
+            consensusSequenceBlock.setSequence(handleSequence(jsonObject.has("sequence") ? jsonObject.get("sequence") : null));
             consensusSequenceBlock.setStart(jsonObject.has("start") ? jsonObject.get("start").getAsInt() : null);
             consensusSequenceBlock.setStrand(jsonObject.has("strand") ? jsonObject.get("strand").getAsString() : null);
             consensusSequenceBlock.setVariant(createVariant(jsonObject.has("variant") ? jsonObject.get("variant").getAsJsonObject() : null));
@@ -914,7 +914,7 @@ public class HmlDeserializer extends Deserializer implements JsonDeserializer<Hm
         amplification.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
         amplification.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
         amplification.setRegisteredName(jsonObject.has("registeredName") ? jsonObject.get("registeredName").getAsString() : null);
-        amplification.setSequence(createSequence(jsonObject.has("sequence") ? jsonObject.get("sequence").getAsString() : null));
+        amplification.setSequence(handleSequence(jsonObject.has("sequence") ? jsonObject.get("sequence") : null));
 
         return amplification;
     }
@@ -931,7 +931,7 @@ public class HmlDeserializer extends Deserializer implements JsonDeserializer<Hm
         subAmplification.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
         subAmplification.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
         subAmplification.setRegisteredName(jsonObject.has("registeredName") ? jsonObject.get("registeredName").getAsString() : null);
-        subAmplification.setSequence(createSequence(jsonObject.has("sequence") ? jsonObject.get("sequence").getAsString() : null));
+        subAmplification.setSequence(handleSequence(jsonObject.has("sequence") ? jsonObject.get("sequence") : null));
 
         return subAmplification;
     }
@@ -950,9 +950,42 @@ public class HmlDeserializer extends Deserializer implements JsonDeserializer<Hm
         gssp.setRegisteredName(jsonObject.has("registeredName") ? jsonObject.get("registeredName").getAsString() : null);
         gssp.setPrimerTarget(jsonObject.has("primerTarget") ? jsonObject.get("primerTarget").getAsString() : null);
         gssp.setPrimerSequence(jsonObject.has("primerSequence") ? jsonObject.get("primerSequence").getAsString() : null);
-        gssp.setSequence(createSequence(jsonObject.has("sequence") ? jsonObject.get("sequence").getAsString() : null));
+        gssp.setSequence(handleSequence(jsonObject.has("sequence") ? jsonObject.get("sequence") : null));
 
         return gssp;
+    }
+
+    private Sequence handleSequence(Object object) {
+        Sequence sequence = new Sequence();
+
+        if (object == null) {
+            return sequence;
+        }
+
+        if (object instanceof String) {
+            sequence = createSequence(object.toString());
+        } else if (object instanceof JsonObject) {
+            sequence = createSequence((JsonObject)object);
+        }
+
+        return sequence;
+    }
+
+    private Sequence createSequence(JsonObject jsonObject) {
+        Sequence sequence = new Sequence();
+
+        if (jsonObject == null) {
+            return sequence;
+        }
+
+        sequence.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
+        sequence.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
+        sequence.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
+        sequence.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        sequence.setSequence(jsonObject.has("sequence") ? jsonObject.get("sequence").getAsString() : null);
+        sequence.setIupacBases(handleIupacBases(jsonObject.has("iupacBases") ? jsonObject.get("iupacBases") : null));
+
+        return sequence;
     }
 
     private Sequence createSequence(String seq) {
@@ -965,6 +998,36 @@ public class HmlDeserializer extends Deserializer implements JsonDeserializer<Hm
         sequence.setSequence(seq);
 
         return sequence;
+    }
+
+    private List<IupacBases> handleIupacBases(Object object) {
+        List<IupacBases> iupacBases = new ArrayList<>();
+
+        if (object == null) {
+            return iupacBases;
+        }
+
+        if (object instanceof JsonObject) {
+            iupacBases = createIupacBases((JsonObject)object);
+        } else if (object instanceof JsonArray) {
+            iupacBases = createIupacBases((JsonArray)object);
+        }
+
+        return iupacBases;
+    }
+
+    private List<IupacBases> createIupacBases(JsonArray jsonArray) {
+        List<IupacBases> iupacBases = new ArrayList<>();
+
+        if (jsonArray == null) {
+            return iupacBases;
+        }
+
+        for (int i = 0; i < jsonArray.size(); i++) {
+            iupacBases.addAll(createIupacBases((JsonObject)jsonArray.get(i)));
+        }
+
+        return iupacBases;
     }
 
     private List<IupacBases> createIupacBases(JsonObject jsonObject) {
