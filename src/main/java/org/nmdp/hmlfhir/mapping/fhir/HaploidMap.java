@@ -26,6 +26,8 @@ package org.nmdp.hmlfhir.mapping.fhir;
 
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
+
+import org.nmdp.hmlfhir.mapping.Distinct;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Haploid;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Haploids;
 import org.nmdp.hmlfhirconvertermodels.dto.AlleleAssignment;
@@ -35,6 +37,8 @@ import org.nmdp.hmlfhirconvertermodels.dto.Typing;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class HaploidMap implements Converter<Hml, Haploids> {
 
@@ -60,14 +64,19 @@ public class HaploidMap implements Converter<Hml, Haploids> {
 
                         fhirHaploid.setLocus(haploid.getLocus());
                         fhirHaploid.setMethod(haploid.getMethod());
-                        fhirHaploid.setType(haploid.getType());
+                        fhirHaploid.setHaploidType(haploid.getType());
                         haploidList.add(fhirHaploid);
                     }
                 }
             }
         }
 
-        haploids.setHaploids(haploidList);
+        final List<Haploid> distinctHaploidList = Distinct.distinctByKeys(haploidList,
+                Haploid::getLocus,
+                Haploid::getMethod,
+                Haploid::getHaploidType);
+
+        haploids.setHaploids(distinctHaploidList);
 
         return haploids;
     }

@@ -26,6 +26,7 @@ package org.nmdp.hmlfhir.mapping.fhir;
 
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
+import org.nmdp.hmlfhir.mapping.Distinct;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.AlleleDatabase;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.AlleleDatabases;
 import org.nmdp.hmlfhirconvertermodels.dto.AlleleAssignment;
@@ -35,6 +36,8 @@ import org.nmdp.hmlfhirconvertermodels.dto.Typing;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class AlleleDatabaseMap implements Converter<Hml, AlleleDatabases> {
 
@@ -63,7 +66,11 @@ public class AlleleDatabaseMap implements Converter<Hml, AlleleDatabases> {
             }
         }
 
-        alleleDatabases.setAlleleDatabases(alleleDatabaseList);
+
+        alleleDatabases.setAlleleDatabases(alleleDatabaseList.stream()
+                .filter(Objects::nonNull)
+                .filter(Distinct.distinctByKey(alleleDatabase -> alleleDatabase.getName()))
+                .collect(Collectors.toList()));
 
         return alleleDatabases;
     }

@@ -35,6 +35,8 @@ import org.nmdp.hmlfhirconvertermodels.dto.TypingMethod;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class SsoMap implements Converter<Hml, Ssos> {
 
@@ -61,7 +63,9 @@ public class SsoMap implements Converter<Hml, Ssos> {
             }
         }
 
-        ssos.setSsos(ssoList);
+        ssos.setSsos(ssoList.stream()
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList()));
 
         return ssos;
     }

@@ -26,12 +26,15 @@ package org.nmdp.hmlfhir.mapping.fhir;
 
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
+import org.nmdp.hmlfhir.mapping.Distinct;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Glstring;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Glstrings;
 import org.nmdp.hmlfhirconvertermodels.dto.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class GlStringMap implements Converter<Hml, Glstrings> {
 
@@ -61,7 +64,10 @@ public class GlStringMap implements Converter<Hml, Glstrings> {
             }
         }
 
-        glstrings.setGlstrings(glstringList);
+        glstrings.setGlstrings(glstringList.stream()
+                .filter(Objects::nonNull)
+                .filter(Distinct.distinctByKey(glstring -> glstring.getValue()))
+                .collect(Collectors.toList()));
 
         return glstrings;
     }

@@ -35,37 +35,31 @@ import org.nmdp.hmlfhirconvertermodels.dto.Sample;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
-public class SpecimenMap implements Converter<Hml, Specimens> {
+public class SpecimenMap implements Converter<Sample, Specimen> {
 
     @Override
-    public Specimens convert(MappingContext<Hml, Specimens> context) {
+    public Specimen convert(MappingContext<Sample, Specimen> context) {
         if (context.getSource() == null) {
             return null;
         }
 
-        Specimens specimens = new Specimens();
-        List<Specimen> specimenList = new ArrayList<>();
-        Hml hml = context.getSource();
+        Sample sample = context.getSource();
+        Specimen specimen = new Specimen();
+        Identifier identifier = new Identifier();
+        Collection collection = new Collection();
 
-        for (Sample sample : hml.getSamples()) {
-            Specimen specimen = new Specimen();
-            Identifier identifier = new Identifier();
-            Collection collection = new Collection();
-
-            if (sample.getCollectionMethods().size() > 0) {
-                collection.setMethod(sample.getCollectionMethods().get(0).getName());
-            }
-
-            identifier.setValue(sample.getId());
-            identifier.setSystem(sample.getCenterCode());
-            specimen.setIdentifier(identifier);
-
-            specimenList.add(specimen);
+        if (sample.getCollectionMethods().size() > 0) {
+            collection.setMethod(sample.getCollectionMethods().get(0).getName());
         }
 
-        specimens.setSpecimens(specimenList);
+        identifier.setValue(sample.getId());
+        identifier.setSystem(sample.getCenterCode());
+        specimen.setIdentifier(identifier);
 
-        return specimens;
+
+        return specimen;
     }
 }

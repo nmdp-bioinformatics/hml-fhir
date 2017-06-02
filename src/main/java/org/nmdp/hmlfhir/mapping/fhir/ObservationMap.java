@@ -26,9 +26,12 @@ package org.nmdp.hmlfhir.mapping.fhir;
  */
 
 import org.modelmapper.Converter;
+import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.MappingContext;
+import org.nmdp.hmlfhir.mapping.Distinct;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Code;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Observation;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.Specimen;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Observations;
 import org.nmdp.hmlfhirconvertermodels.dto.Hml;
 import org.nmdp.hmlfhirconvertermodels.dto.Sample;
@@ -36,6 +39,8 @@ import org.nmdp.hmlfhirconvertermodels.dto.Typing;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ObservationMap implements Converter<Hml, Observations> {
 
@@ -45,11 +50,14 @@ public class ObservationMap implements Converter<Hml, Observations> {
             return null;
         }
 
+        ModelMapper mapper = createMapper();
         Observations observations = new Observations();
         List<Observation> observationList = new ArrayList<>();
         Hml hml = context.getSource();
 
         for (Sample sample : hml.getSamples()) {
+
+            Specimen specimen = mapper.map(sample, Specimen.class);
             List<Typing> typings = sample.getTyping();
 
             for (Typing typing : typings) {
@@ -58,6 +66,7 @@ public class ObservationMap implements Converter<Hml, Observations> {
 
                 code.setName(typing.getGeneFamily());
                 observation.setCode(code);
+                observation.setSpecimen(specimen);
                 observationList.add(observation);
             }
         }
@@ -65,5 +74,11 @@ public class ObservationMap implements Converter<Hml, Observations> {
         observations.setObservations(observationList);
 
         return observations;
+    }
+
+    private ModelMapper createMapper() {
+        ModelMapper mapper = new ModelMapper();
+        mapper.addConverter(new SpecimenMap());
+        return mapper;
     }
 }

@@ -35,6 +35,8 @@ import org.nmdp.hmlfhirconvertermodels.dto.TypingMethod;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class SspMap implements Converter<Hml, Ssps> {
 
@@ -61,7 +63,9 @@ public class SspMap implements Converter<Hml, Ssps> {
             }
         }
 
-        ssps.setSsps(sspList);
+        ssps.setSsps(sspList.stream()
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList()));
 
         return ssps;
     }

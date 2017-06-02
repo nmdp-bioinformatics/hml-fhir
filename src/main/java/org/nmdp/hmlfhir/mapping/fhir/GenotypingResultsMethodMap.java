@@ -26,12 +26,15 @@ package org.nmdp.hmlfhir.mapping.fhir;
 
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
+import org.nmdp.hmlfhir.mapping.Distinct;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.GenotypingResultsMethod;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.GenotypingResultsMethods;
 import org.nmdp.hmlfhirconvertermodels.dto.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class GenotypingResultsMethodMap implements Converter<Hml, GenotypingResultsMethods> {
 
@@ -59,8 +62,12 @@ public class GenotypingResultsMethodMap implements Converter<Hml, GenotypingResu
             }
         }
 
-        genotypingResultsMethods.setGenotypingResultsMethods(genotypingResultsMethodList);
+        final List<GenotypingResultsMethod> distinctGenotypingResultsMethodList =
+                Distinct.distinctByKeys(genotypingResultsMethodList,
+                        GenotypingResultsMethod::getTestId,
+                        GenotypingResultsMethod::getTestIdSource);
 
+        genotypingResultsMethods.setGenotypingResultsMethods(distinctGenotypingResultsMethodList);
         return genotypingResultsMethods;
     }
 }

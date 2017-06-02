@@ -32,6 +32,8 @@ import org.nmdp.hmlfhirconvertermodels.dto.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class GeneticsPhaseSetMap implements Converter<Hml, GeneticsPhaseSets> {
 
@@ -57,7 +59,8 @@ public class GeneticsPhaseSetMap implements Converter<Hml, GeneticsPhaseSets> {
             }
         }
 
-        geneticsPhaseSets.setGeneticsPhaseSets(geneticsPhaseSetList);
+        geneticsPhaseSets.setGeneticsPhaseSets(geneticsPhaseSetList.stream()
+            .filter(Objects::nonNull).collect(Collectors.toList()));
 
         return geneticsPhaseSets;
     }

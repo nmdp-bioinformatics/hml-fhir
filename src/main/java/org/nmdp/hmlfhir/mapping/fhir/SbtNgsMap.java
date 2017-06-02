@@ -26,6 +26,7 @@ package org.nmdp.hmlfhir.mapping.fhir;
 
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
+import org.nmdp.hmlfhir.mapping.Distinct;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.SbtNgs;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.SbtNgss;
 import org.nmdp.hmlfhirconvertermodels.dto.Hml;
@@ -35,6 +36,8 @@ import org.nmdp.hmlfhirconvertermodels.dto.TypingMethod;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class SbtNgsMap implements Converter<Hml, SbtNgss> {
 
@@ -60,7 +63,10 @@ public class SbtNgsMap implements Converter<Hml, SbtNgss> {
             }
         }
 
-        sbtNgss.setSbtNgss(sbtNgsList);
+        sbtNgss.setSbtNgss(sbtNgsList.stream()
+                .filter(Objects::nonNull)
+                .filter(Distinct.distinctByKey(sbtNgs -> sbtNgs.getLocus()))
+                .collect(Collectors.toList()));
 
         return sbtNgss;
     }

@@ -260,7 +260,6 @@ public class ConvertHmlToFhirImpl implements ConvertHmlToFhir {
         message.setPatient(mapper.map(hml, Patient.class));
         message.setSbtNgss(mapper.map(hml, SbtNgss.class));
         message.setSequences(mapper.map(hml, Sequences.class));
-        message.setSpecimens(mapper.map(hml, Specimens.class));
         message.setSsos(mapper.map(hml, Ssos.class));
         message.setSsps(mapper.map(hml, Ssps.class));
 
@@ -283,7 +282,6 @@ public class ConvertHmlToFhirImpl implements ConvertHmlToFhir {
         mapper.addConverter(new PatientMap());
         mapper.addConverter(new SbtNgsMap());
         mapper.addConverter(new SequenceMap());
-        mapper.addConverter(new SpecimenMap());
         mapper.addConverter(new SsoMap());
         mapper.addConverter(new SspMap());
 

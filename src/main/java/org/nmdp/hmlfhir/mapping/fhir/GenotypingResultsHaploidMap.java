@@ -32,6 +32,8 @@ import org.nmdp.hmlfhirconvertermodels.dto.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class GenotypingResultsHaploidMap implements Converter<Hml, GenotypingResultsHaploids> {
 
@@ -63,7 +65,8 @@ public class GenotypingResultsHaploidMap implements Converter<Hml, GenotypingRes
             }
         }
 
-        genotypingResultsHaploids.setGenotypingResultsHaploids(genotypingResultsHaploidList);
+        genotypingResultsHaploids.setGenotypingResultsHaploids(genotypingResultsHaploidList.stream()
+            .filter(Objects::nonNull).collect(Collectors.toList()));
 
         return genotypingResultsHaploids;
     }
