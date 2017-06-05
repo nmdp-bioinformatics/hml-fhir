@@ -56,10 +56,10 @@ public class SbtNgsMap implements Converter<Hml, SbtNgss> {
             for (Typing typing : typings) {
                 SbtNgs sbtNgs = new SbtNgs();
                 TypingMethod typingMethod = typing.getTypingMethod();
-                org.nmdp.hmlfhirconvertermodels.dto.SbtNgs nmdpSbtNgs = typingMethod.getSbtNgs();
-
-                sbtNgs.setLocus(nmdpSbtNgs.getLocus());
-                sbtNgsList.add(sbtNgs);
+                for (org.nmdp.hmlfhirconvertermodels.dto.SbtNgs nmdpSbtNgs : typingMethod.getSbtNgs()) {
+                    sbtNgs.setLocus(nmdpSbtNgs.getLocus());
+                    sbtNgsList.add(sbtNgs);
+                }
             }
         }
 

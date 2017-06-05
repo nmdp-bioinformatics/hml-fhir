@@ -54,11 +54,12 @@ public class GenotypingResultsMethodMap implements Converter<Hml, GenotypingResu
             for (Typing typing : typings) {
                 GenotypingResultsMethod genotypingResultsMethod = new GenotypingResultsMethod();
                 TypingMethod typingMethod = typing.getTypingMethod();
-                SbtNgs sbtNgs = typingMethod.getSbtNgs();
 
-                genotypingResultsMethod.setTestId(sbtNgs.getTestId());
-                genotypingResultsMethod.setTestIdSource(sbtNgs.getTestIdSource());
-                genotypingResultsMethodList.add(genotypingResultsMethod);
+                for (SbtNgs sbtNgs : typingMethod.getSbtNgs()) {
+                    genotypingResultsMethod.setTestId(sbtNgs.getTestId());
+                    genotypingResultsMethod.setTestIdSource(sbtNgs.getTestIdSource());
+                    genotypingResultsMethodList.add(genotypingResultsMethod);
+                }
             }
         }
 

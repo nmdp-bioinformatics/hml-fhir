@@ -67,7 +67,8 @@ public class HmlXmlDeserializerHyphenatedProperties extends Deserializer impleme
         }
 
         if (object instanceof JsonObject) {
-            version = createVersion(((JsonObject)object).get("name").getAsString());
+            JsonObject json = (JsonObject) object;
+            version = createVersion(json.has("name") ? json.get("name").getAsString() : null);
         } else if (object instanceof String) {
             version = createVersion((String)object);
         }
@@ -347,43 +348,69 @@ public class HmlXmlDeserializerHyphenatedProperties extends Deserializer impleme
         consensusSequence.setDateUpdated(jsonObject.has("date-updated") ? formatter.parseDateTime(jsonObject.get("date-updated").getAsString()).toDate() : null);
         consensusSequence.setDate(jsonObject.has("date") ? formatter.parseDateTime(jsonObject.get("date").getAsString()).toDate() : null);
         consensusSequence.setReferenceDatabase(handleReferenceDatabase(jsonObject.has("reference-database") ? jsonObject.get("reference-database") : null));
-        consensusSequence.setConsensusSequenceBlocks(createConsensusSequenceBlocks(jsonObject.has("consensus-sequence-block") ? jsonObject.get("consensus-sequence-block").getAsJsonArray() : null));
+        consensusSequence.setConsensusSequenceBlocks(handleConsensusSequenceBlocks(jsonObject.has("consensus-sequence-block") ? jsonObject.get("consensus-sequence-block") : null));
 
         return consensusSequence;
+    }
+
+    private List<ConsensusSequenceBlock> handleConsensusSequenceBlocks(Object object) {
+        List<ConsensusSequenceBlock> consensusSequenceBlockList = new ArrayList<>();
+
+        if (object == null) {
+            return consensusSequenceBlockList;
+        }
+
+        if (object instanceof JsonObject) {
+            consensusSequenceBlockList = createConsensusSequenceBlocks((JsonObject) object);
+        } else if (object instanceof JsonArray) {
+            consensusSequenceBlockList = createConsensusSequenceBlocks((JsonArray) object);
+        }
+
+        return consensusSequenceBlockList;
     }
 
     private List<ConsensusSequenceBlock> createConsensusSequenceBlocks(JsonArray jsonArray) {
         List<ConsensusSequenceBlock> consensusSequenceBlocks = new ArrayList<>();
 
         if (jsonArray == null) {
-            return  consensusSequenceBlocks;
+            return consensusSequenceBlocks;
         }
 
-        for (Integer i = 0; i < jsonArray.size(); i++) {
-            JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
-            ConsensusSequenceBlock consensusSequenceBlock = new ConsensusSequenceBlock();
-
-            consensusSequenceBlock.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-            consensusSequenceBlock.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-            consensusSequenceBlock.setContinuity(jsonObject.has("continuity") ? jsonObject.get("continuity").getAsBoolean() : null);
-            consensusSequenceBlock.setDateCreated(jsonObject.has("date-created") ? formatter.parseDateTime(jsonObject.get("date-created").getAsString()).toDate() : null);
-            consensusSequenceBlock.setDateUpdated(jsonObject.has("date-updated") ? formatter.parseDateTime(jsonObject.get("date-updated").getAsString()).toDate() : null);
-            consensusSequenceBlock.setDescription(jsonObject.has("description") ? jsonObject.get("description").getAsString() : null);
-            consensusSequenceBlock.setEnd(jsonObject.has("end") ? jsonObject.get("end").getAsInt() : null);
-            consensusSequenceBlock.setExpectedCopyNumber(jsonObject.has("expected-copy-number") ? jsonObject.get("expected-copy-number").getAsInt() : null);
-            consensusSequenceBlock.setPhaseSet(jsonObject.has("phase-set") ? jsonObject.get("phase-set").getAsString() : null);
-            consensusSequenceBlock.setPhasingGroup(jsonObject.has("phasing-group") ? jsonObject.get("phasing-group").getAsString() : null);
-            consensusSequenceBlock.setReferenceSequenceId(jsonObject.has("reference-sequence-id") ? jsonObject.get("reference-sequence-id").getAsString() : null);
-            consensusSequenceBlock.setSequence(createSequence(jsonObject.has("sequence") ? jsonObject.get("sequence").getAsString() : null));
-            consensusSequenceBlock.setStart(jsonObject.has("start") ? jsonObject.get("start").getAsInt() : null);
-            consensusSequenceBlock.setStrand(jsonObject.has("strand") ? jsonObject.get("strand").getAsString() : null);
-            consensusSequenceBlock.setVariant(createVariant(jsonObject.has("variant") ? jsonObject.get("variant").getAsJsonObject() : null));
-            consensusSequenceBlock.setSequenceQuality(createSequenceQuality(jsonObject.has("sequence-quality") ? jsonObject.get("sequence-quality").getAsJsonObject() : null));
-
-            consensusSequenceBlocks.add(consensusSequenceBlock);
+        for (int i = 0; i < jsonArray.size(); i++) {
+            consensusSequenceBlocks.addAll(createConsensusSequenceBlocks((JsonObject)jsonArray.get(i)));
         }
 
         return consensusSequenceBlocks;
+    }
+
+    private List<ConsensusSequenceBlock> createConsensusSequenceBlocks(JsonObject jsonObject) {
+        List<ConsensusSequenceBlock> consensusSequenceBlockList = new ArrayList<>();
+        ConsensusSequenceBlock consensusSequenceBlock = new ConsensusSequenceBlock();
+
+        if (jsonObject == null) {
+            return  consensusSequenceBlockList;
+        }
+
+        consensusSequenceBlock.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
+        consensusSequenceBlock.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
+        consensusSequenceBlock.setContinuity(jsonObject.has("continuity") ? jsonObject.get("continuity").getAsBoolean() : null);
+        consensusSequenceBlock.setDateCreated(jsonObject.has("date-created") ? formatter.parseDateTime(jsonObject.get("date-created").getAsString()).toDate() : null);
+        consensusSequenceBlock.setDateUpdated(jsonObject.has("date-updated") ? formatter.parseDateTime(jsonObject.get("date-updated").getAsString()).toDate() : null);
+        consensusSequenceBlock.setDescription(jsonObject.has("description") ? jsonObject.get("description").getAsString() : null);
+        consensusSequenceBlock.setEnd(jsonObject.has("end") ? jsonObject.get("end").getAsInt() : null);
+        consensusSequenceBlock.setExpectedCopyNumber(jsonObject.has("expected-copy-number") ? jsonObject.get("expected-copy-number").getAsInt() : null);
+        consensusSequenceBlock.setPhaseSet(jsonObject.has("phase-set") ? jsonObject.get("phase-set").getAsString() : null);
+        consensusSequenceBlock.setPhasingGroup(jsonObject.has("phasing-group") ? jsonObject.get("phasing-group").getAsString() : null);
+        consensusSequenceBlock.setReferenceSequenceId(jsonObject.has("reference-sequence-id") ? jsonObject.get("reference-sequence-id").getAsString() : null);
+        consensusSequenceBlock.setSequence(createSequence(jsonObject.has("sequence") ? jsonObject.get("sequence").getAsString() : null));
+        consensusSequenceBlock.setStart(jsonObject.has("start") ? jsonObject.get("start").getAsInt() : null);
+        consensusSequenceBlock.setStrand(jsonObject.has("strand") ? jsonObject.get("strand").getAsString() : null);
+        consensusSequenceBlock.setVariant(createVariant(jsonObject.has("variant") ? jsonObject.get("variant").getAsJsonObject() : null));
+        consensusSequenceBlock.setSequenceQuality(createSequenceQuality(jsonObject.has("sequence-quality") ? jsonObject.get("sequence-quality").getAsJsonObject() : null));
+
+        consensusSequenceBlockList.add(consensusSequenceBlock);
+
+        return consensusSequenceBlockList;
     }
 
     private Variant createVariant(JsonObject jsonObject) {
@@ -698,18 +725,49 @@ public class HmlXmlDeserializerHyphenatedProperties extends Deserializer impleme
         typingMethod.setDateCreated(jsonObject.has("date-created") ? formatter.parseDateTime(jsonObject.get("date-created").getAsString()).toDate() : null);
         typingMethod.setDateUpdated(jsonObject.has("date-updated") ? formatter.parseDateTime(jsonObject.get("date-updated").getAsString()).toDate() : null);
         typingMethod.setSbtSanger(createSbtSanger(jsonObject.has("sbt-sanger") ? jsonObject.get("sbt-sanger").getAsJsonObject() : null));
-        typingMethod.setSbtNgs(createSbtNgs(jsonObject.has("sbt-ngs") ? jsonObject.get("sbt-ngs").getAsJsonObject() : null));
+        typingMethod.setSbtNgs(handleSbtNgs(jsonObject.has("sbt-ngs") ? jsonObject.get("sbt-ngs") : null));
         typingMethod.setSso(createSso(jsonObject.has("sso") ? jsonObject.get("sso").getAsJsonObject() : null));
         typingMethod.setSsp(createSsp(jsonObject.has("ssp") ? jsonObject.get("ssp").getAsJsonObject() : null));
 
         return typingMethod;
     }
 
-    private SbtNgs createSbtNgs(JsonObject jsonObject) {
+    private List<SbtNgs> handleSbtNgs(Object object) {
+        List<SbtNgs> sbtNgsList = new ArrayList<>();
+
+        if (object == null) {
+            return sbtNgsList;
+        }
+
+        if (object instanceof JsonObject) {
+            sbtNgsList = createSbtNgs((JsonObject)object);
+        } else if (object instanceof JsonArray) {
+            sbtNgsList = createSbtNgs((JsonArray)object);
+        }
+
+        return sbtNgsList;
+    }
+
+    private List<SbtNgs> createSbtNgs(JsonArray jsonArray) {
+        List<SbtNgs> sbtNgsList = new ArrayList<>();
+
+        if (jsonArray == null) {
+            return sbtNgsList;
+        }
+
+        for (int i = 0; i < jsonArray.size(); i++) {
+            sbtNgsList.addAll(createSbtNgs((JsonObject)jsonArray.get(i)));
+        }
+
+        return sbtNgsList;
+    }
+
+    private List<SbtNgs>createSbtNgs(JsonObject jsonObject) {
+        List<SbtNgs> sbtNgsList = new ArrayList<>();
         SbtNgs sbtNgs = new SbtNgs();
 
         if (jsonObject == null) {
-            return sbtNgs;
+            return sbtNgsList;
         }
 
         sbtNgs.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
@@ -718,11 +776,43 @@ public class HmlXmlDeserializerHyphenatedProperties extends Deserializer impleme
         sbtNgs.setDateUpdated(jsonObject.has("date-updated") ? formatter.parseDateTime(jsonObject.get("date-updated").getAsString()).toDate() : null);
         sbtNgs.setLocus(jsonObject.has("locus") ? jsonObject.get("locus").getAsString() : null);
         sbtNgs.setProperties(createProperties(jsonObject.has("property") ? jsonObject.get("property").getAsJsonObject() : null));
-        sbtNgs.setRawReads(createRawReads(jsonObject.has("raw-reads") ? jsonObject.get("raw-reads").getAsJsonObject() : null));
+        sbtNgs.setRawReads(handleRawReads(jsonObject.has("raw-reads") ? jsonObject.get("raw-reads") : null));
         sbtNgs.setTestId(jsonObject.has("test-id") ? jsonObject.get("test-id").getAsString() : null);
         sbtNgs.setTestIdSource(jsonObject.has("test-id-source") ? jsonObject.get("test-id-source").getAsString() : null);
 
-        return sbtNgs;
+        sbtNgsList.add(sbtNgs);
+
+        return sbtNgsList;
+    }
+
+    private List<RawRead> handleRawReads(Object object) {
+        List<RawRead> rawReads = new ArrayList<>();
+
+        if (object == null) {
+            return rawReads;
+        }
+
+        if (object instanceof JsonObject) {
+            rawReads = createRawReads((JsonObject)object);
+        } else if (object instanceof JsonArray) {
+            rawReads = createRawReads((JsonArray)object);
+        }
+
+        return rawReads;
+    }
+
+    private List<RawRead> createRawReads(JsonArray jsonArray) {
+        List<RawRead> rawReads = new ArrayList<>();
+
+        if (jsonArray == null) {
+            return rawReads;
+        }
+
+        for (int i = 0; i < jsonArray.size(); i++) {
+            rawReads.addAll(createRawReads((JsonObject)jsonArray.get(i)));
+        }
+
+        return rawReads;
     }
 
     private List<RawRead> createRawReads(JsonObject jsonObject) {
