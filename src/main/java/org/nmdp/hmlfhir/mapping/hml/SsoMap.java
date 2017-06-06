@@ -1,4 +1,4 @@
-package org.nmdp.hmlfhir.deserialization;
+package org.nmdp.hmlfhir.mapping.hml;
 
 /**
  * Created by Andrew S. Brown, Ph.D., <andrew@nmdp.org>, on 5/31/17.
@@ -24,17 +24,36 @@ package org.nmdp.hmlfhir.deserialization;
  * > http://www.opensource.org/licenses/lgpl-license.php
  */
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
+import org.modelmapper.Converter;
+import org.modelmapper.spi.MappingContext;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage;
+import org.nmdp.hmlfhirconvertermodels.dto.*;
+import org.nmdp.hmlfhirconvertermodels.lists.Ssos;
 
-import com.google.gson.JsonParseException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.lang.reflect.Type;
+public class SsoMap implements Converter<FhirMessage, Ssos> {
 
-public abstract class Deserializer<T> implements JsonDeserializer<T> {
-    public T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        throw new NotImplementedException();
+    @Override
+    public Ssos convert(MappingContext<FhirMessage, Ssos> context) {
+        if (context.getSource() == null) {
+            return null;
+        }
+
+        Ssos ssos = new Ssos();
+        List<Sso> ssoList = new ArrayList<>();
+        FhirMessage fhir = context.getSource();
+        org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Ssos fhirSsos = fhir.getSsos();
+
+        for (org.nmdp.hmlfhirconvertermodels.domain.fhir.Sso fhirSso : fhirSsos.getSsos()) {
+            Sso sso = new Sso();
+            sso.setLocus(fhirSso.getLocus());
+            ssoList.add(sso);
+        }
+
+        ssos.setSsos(ssoList);
+
+        return ssos;
     }
 }

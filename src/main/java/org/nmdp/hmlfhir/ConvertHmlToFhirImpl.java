@@ -26,9 +26,7 @@ package org.nmdp.hmlfhir;
 
 import com.google.gson.*;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.XML;
 
 import org.modelmapper.ModelMapper;
 
@@ -41,16 +39,8 @@ import org.nmdp.hmlfhirconvertermodels.domain.fhir.*;
 import org.apache.log4j.Logger;
 
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.*;
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import java.io.StringReader;
-import java.util.Iterator;
-
-public class ConvertHmlToFhirImpl implements ConvertHmlToFhir {
+public class ConvertHmlToFhirImpl extends Convert implements ConvertHmlToFhir {
 
     private static final Logger LOG = Logger.getLogger(ConvertHmlToFhir.class);
     private Deserializer deserializer;
@@ -307,64 +297,5 @@ public class ConvertHmlToFhirImpl implements ConvertHmlToFhir {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(org.nmdp.hmlfhirconvertermodels.dto.Hml.class, deserializer);
         return gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES).create();
-    }
-
-    private JSONObject convertXmlStringToJson(String xml) throws Exception {
-        try {
-            return XML.toJSONObject(xml);
-        } catch (Exception ex) {
-            LOG.error("Error parsing Xml to Json.", ex);
-            throw ex;
-        }
-    }
-
-    private JSONObject mutatePropertyNames(JSONObject json, String prefix) {
-        JSONObject mutatedJson = new JSONObject();
-        Iterator<String> jsonIterator = json.keys();
-
-        while (jsonIterator.hasNext()) {
-            String key = jsonIterator.next();
-            Object property = json.get(key);
-
-            if (property instanceof JSONObject) {
-                JSONObject mutatedProperty = mutatePropertyNames((JSONObject) property, prefix);
-                mutatedJson.put(key.replace(prefix, ""), mutatedProperty);
-                continue;
-            } else if (property instanceof JSONArray) {
-                JSONArray arrayProperty = (JSONArray)property;
-                JSONArray mutatedJsonArray = new JSONArray();
-
-                for (int i = 0; i < arrayProperty.length(); i++) {
-                    JSONObject obj = arrayProperty.getJSONObject(i);
-                    JSONObject mutatedObj = mutatePropertyNames(obj, prefix);
-
-                    mutatedJsonArray.put(mutatedObj);
-                }
-
-                mutatedJson.put(key.replace(prefix, ""), mutatedJsonArray);
-                continue;
-            }
-
-            mutatedJson.put(key.replace(prefix, ""), property);
-        }
-
-        return mutatedJson;
-    }
-
-    private Boolean isValidXml(String xml) {
-        Boolean valid = false;
-
-        try {
-            SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-            SAXParser saxParser = saxParserFactory.newSAXParser();
-            XMLReader xmlReader = saxParser.getXMLReader();
-
-            xmlReader.parse(new InputSource(new StringReader(xml)));
-            valid = true;
-        } catch (Exception ex) {
-            LOG.error("General exception validating XML.", ex);
-        } finally {
-            return valid;
-        }
     }
 }

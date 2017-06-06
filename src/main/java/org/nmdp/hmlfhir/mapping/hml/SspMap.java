@@ -1,4 +1,4 @@
-package org.nmdp.hmlfhir.deserialization;
+package org.nmdp.hmlfhir.mapping.hml;
 
 /**
  * Created by Andrew S. Brown, Ph.D., <andrew@nmdp.org>, on 5/31/17.
@@ -24,17 +24,37 @@ package org.nmdp.hmlfhir.deserialization;
  * > http://www.opensource.org/licenses/lgpl-license.php
  */
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
+import org.modelmapper.Converter;
+import org.modelmapper.spi.MappingContext;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage;
+import org.nmdp.hmlfhirconvertermodels.dto.*;
+import org.nmdp.hmlfhirconvertermodels.lists.Ssps;
 
-import com.google.gson.JsonParseException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.lang.reflect.Type;
+public class SspMap implements Converter<FhirMessage, Ssps> {
 
-public abstract class Deserializer<T> implements JsonDeserializer<T> {
-    public T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        throw new NotImplementedException();
+    @Override
+    public Ssps convert(MappingContext<FhirMessage, Ssps> context) {
+        if (context.getSource() == null) {
+            return null;
+        }
+
+        Ssps ssps = new Ssps();
+        List<Ssp> sspList = new ArrayList<>();
+        FhirMessage fhir = context.getSource();
+        org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Ssps fhirSsps = fhir.getSsps();
+
+        for (org.nmdp.hmlfhirconvertermodels.domain.fhir.Ssp fhirSsp : fhirSsps.getSsps()) {
+            Ssp ssp = new Ssp();
+            ssp.setLocus(fhirSsp.getLocus());
+            sspList.add(ssp);
+        }
+
+        ssps.setSsps(sspList);
+
+        return ssps;
     }
 }
+

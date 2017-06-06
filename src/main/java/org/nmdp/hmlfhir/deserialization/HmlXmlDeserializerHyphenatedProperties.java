@@ -33,7 +33,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HmlXmlDeserializerHyphenatedProperties extends Deserializer implements JsonDeserializer<Hml> {
+public class HmlXmlDeserializerHyphenatedProperties extends Deserializer<Hml> {
 
     private static DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
 

@@ -26,6 +26,7 @@ package org.nmdp.hmlfhir.mapping.fhir;
 
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirDefinedType;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.GenotypingResultsHaploid;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.GenotypingResultsHaploids;
 import org.nmdp.hmlfhirconvertermodels.dto.*;
@@ -56,9 +57,12 @@ public class GenotypingResultsHaploidMap implements Converter<Hml, GenotypingRes
                     List<Haploid> haploids = alleleAssignment.getHaploid();
                     for (Haploid haploid : haploids) {
                         GenotypingResultsHaploid genotypingResultsHaploid = new GenotypingResultsHaploid();
+                        FhirDefinedType fhirType = new FhirDefinedType();
 
-                        //TODO: Add mapping properties to genotypingResultsHaploid
-
+                        fhirType.setFhirType(haploid.getType());
+                        fhirType.setLocus(haploid.getLocus());
+                        fhirType.setMethod(haploid.getMethod());
+                        genotypingResultsHaploid.setType(fhirType);
                         genotypingResultsHaploidList.add(genotypingResultsHaploid);
                     }
                 }

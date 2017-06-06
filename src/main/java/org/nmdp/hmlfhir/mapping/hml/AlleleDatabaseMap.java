@@ -1,4 +1,4 @@
-package org.nmdp.hmlfhir.mapping.fhir;
+package org.nmdp.hmlfhir.mapping.hml;
 
 /**
  * Created by Andrew S. Brown, Ph.D., <abrown3@nmdp.org>, on 4/18/17.
@@ -26,52 +26,45 @@ package org.nmdp.hmlfhir.mapping.fhir;
 
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
-import org.nmdp.hmlfhir.mapping.Distinct;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.AlleleDatabase;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.AlleleDatabases;
 import org.nmdp.hmlfhirconvertermodels.dto.AlleleAssignment;
-import org.nmdp.hmlfhirconvertermodels.dto.Hml;
 import org.nmdp.hmlfhirconvertermodels.dto.Sample;
 import org.nmdp.hmlfhirconvertermodels.dto.Typing;
+import org.nmdp.hmlfhirconvertermodels.lists.Samples;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
-public class AlleleDatabaseMap implements Converter<Hml, AlleleDatabases> {
+public class AlleleDatabaseMap implements Converter<FhirMessage, Samples> {
 
     @Override
-    public AlleleDatabases convert(MappingContext<Hml, AlleleDatabases> context) {
+    public Samples convert(MappingContext<FhirMessage, Samples> context) {
         if (context.getSource() == null) {
             return null;
         }
 
-        AlleleDatabases alleleDatabases = new AlleleDatabases();
-        List<AlleleDatabase> alleleDatabaseList = new ArrayList<>();
-        Hml hml = context.getSource();
+        Samples samples = new Samples();
+        List<Sample> sampleList = new ArrayList<>();
+        FhirMessage fhir = context.getSource();
+        AlleleDatabases alleleDatabases = fhir.getAlleleDatabases();
 
-        for (Sample sample : hml.getSamples()) {
-            List<Typing> typings = sample.getTyping();
+        for (AlleleDatabase alleleDatabase : alleleDatabases.getAlleleDatabases()) {
+            AlleleAssignment alleleAssignment = new AlleleAssignment();
+            Typing typing = new Typing();
+            Sample sample = new Sample();
 
-            for (Typing typing : typings) {
-                List<AlleleAssignment> alleleAssignments = typing.getAlleleAssignment();
-                for (AlleleAssignment alleleAssignment : alleleAssignments) {
-                    AlleleDatabase alleleDatabase = new AlleleDatabase();
-
-                    alleleDatabase.setName(alleleAssignment.getAlleleDb());
-                    alleleDatabase.setVersion(alleleAssignment.getAlleleVersion());
-                    alleleDatabaseList.add(alleleDatabase);
-                }
-            }
+            alleleAssignment.setAlleleVersion(alleleDatabase.getVersion());
+            alleleAssignment.setAlleleDb(alleleDatabase.getName());
+            typing.setAlleleAssignment(Arrays.asList(alleleAssignment));
+            sample.setTyping(Arrays.asList(typing));
+            sampleList.add(sample);
         }
 
+        samples.setSamples(sampleList);
 
-        alleleDatabases.setAlleleDatabases(alleleDatabaseList.stream()
-                .filter(Objects::nonNull)
-                .filter(Distinct.distinctByKey(alleleDatabase -> alleleDatabase.getName()))
-                .collect(Collectors.toList()));
-
-        return alleleDatabases;
+        return samples;
     }
 }

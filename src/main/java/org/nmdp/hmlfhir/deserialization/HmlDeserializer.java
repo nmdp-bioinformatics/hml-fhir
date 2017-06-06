@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 
-public class HmlDeserializer extends Deserializer implements JsonDeserializer<Hml> {
+public class HmlDeserializer extends Deserializer<Hml> {
     
     @Override
     public Hml deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {

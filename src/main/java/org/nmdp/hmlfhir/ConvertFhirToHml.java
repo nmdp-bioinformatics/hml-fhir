@@ -1,7 +1,7 @@
-package org.nmdp.hmlfhir.deserialization;
+package org.nmdp.hmlfhir;
 
 /**
- * Created by Andrew S. Brown, Ph.D., <andrew@nmdp.org>, on 5/31/17.
+ * Created by Andrew S. Brown, Ph.D., <andrew@nmdp.org>, on 6/6/17.
  * <p>
  * hml-fhir
  * Copyright (c) 2012-2017 National Marrow Donor Program (NMDP)
@@ -24,17 +24,19 @@ package org.nmdp.hmlfhir.deserialization;
  * > http://www.opensource.org/licenses/lgpl-license.php
  */
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
-import com.google.gson.JsonParseException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.json.JSONObject;
 
-import java.lang.reflect.Type;
+import org.nmdp.hmlfhirconvertermodels.dto.Hml;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage;
 
-public abstract class Deserializer<T> implements JsonDeserializer<T> {
-    public T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        throw new NotImplementedException();
-    }
+public interface ConvertFhirToHml {
+    Hml convert(FhirMessage fhir) throws Exception;
+    Hml convert(JsonObject fhir) throws Exception;
+    Hml convert(JSONObject fhir, String prefix) throws Exception;
+    Hml convert(String fhir, String prefix) throws Exception;
+    FhirMessage toDto(JSONObject fhir, String prefix);
+    FhirMessage toDto(JsonObject fhir);
+    FhirMessage toDto(String fhir, String prefix) throws Exception;
 }
