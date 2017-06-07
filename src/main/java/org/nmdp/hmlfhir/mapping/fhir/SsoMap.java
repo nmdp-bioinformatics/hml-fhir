@@ -26,6 +26,7 @@ package org.nmdp.hmlfhir.mapping.fhir;
 
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.Identifier;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Sso;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Ssos;
 import org.nmdp.hmlfhirconvertermodels.dto.Hml;
@@ -52,6 +53,10 @@ public class SsoMap implements Converter<Hml, Ssos> {
 
         for (Sample sample : hml.getSamples()) {
             List<Typing> typings = sample.getTyping();
+            Identifier identifier = new Identifier();
+
+            identifier.setSystem(sample.getCenterCode());
+            identifier.setValue(sample.getSampleId());
 
             for (Typing typing : typings) {
                 Sso sso = new Sso();
@@ -59,12 +64,14 @@ public class SsoMap implements Converter<Hml, Ssos> {
                 org.nmdp.hmlfhirconvertermodels.dto.Sso nmdpSso = typingMethod.getSso();
 
                 sso.setLocus(nmdpSso.getLocus());
+                sso.setIdentifier(identifier);
                 ssoList.add(sso);
             }
         }
 
         ssos.setSsos(ssoList.stream()
             .filter(Objects::nonNull)
+            .filter(sso -> sso.hasValue())
             .collect(Collectors.toList()));
 
         return ssos;

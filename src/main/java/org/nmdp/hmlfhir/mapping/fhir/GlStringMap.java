@@ -28,6 +28,7 @@ import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
 import org.nmdp.hmlfhir.mapping.Distinct;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Glstring;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.Identifier;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Glstrings;
 import org.nmdp.hmlfhirconvertermodels.dto.*;
 
@@ -56,9 +57,13 @@ public class GlStringMap implements Converter<Hml, Glstrings> {
                 for (AlleleAssignment alleleAssignment : alleleAssignments) {
                     Glstring glstring = new Glstring();
                     GlString glString = alleleAssignment.getGlString();
+                    Identifier identifier = new Identifier();
 
+                    identifier.setSystem(sample.getCenterCode());
+                    identifier.setValue(sample.getSampleId());
                     glstring.setUri(glString.getUri());
                     glstring.setValue(glString.getValue());
+                    glstring.setIdentifier(sample.getSampleId());
                     glstringList.add(glstring);
                 }
             }
@@ -67,6 +72,7 @@ public class GlStringMap implements Converter<Hml, Glstrings> {
         glstrings.setGlstrings(glstringList.stream()
                 .filter(Objects::nonNull)
                 .filter(Distinct.distinctByKey(glstring -> glstring.getValue()))
+                .filter(glstring -> glstring.hasValue())
                 .collect(Collectors.toList()));
 
         return glstrings;

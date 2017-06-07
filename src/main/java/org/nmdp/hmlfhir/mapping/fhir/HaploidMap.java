@@ -29,6 +29,7 @@ import org.modelmapper.spi.MappingContext;
 
 import org.nmdp.hmlfhir.mapping.Distinct;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Haploid;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.Identifier;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Haploids;
 import org.nmdp.hmlfhirconvertermodels.dto.AlleleAssignment;
 import org.nmdp.hmlfhirconvertermodels.dto.Hml;
@@ -65,6 +66,7 @@ public class HaploidMap implements Converter<Hml, Haploids> {
                         fhirHaploid.setLocus(haploid.getLocus());
                         fhirHaploid.setMethod(haploid.getMethod());
                         fhirHaploid.setHaploidType(haploid.getType());
+                        fhirHaploid.setIdentifier(sample.getSampleId());
                         haploidList.add(fhirHaploid);
                     }
                 }
@@ -76,7 +78,10 @@ public class HaploidMap implements Converter<Hml, Haploids> {
                 Haploid::getMethod,
                 Haploid::getHaploidType);
 
-        haploids.setHaploids(distinctHaploidList);
+        haploids.setHaploids(distinctHaploidList.stream()
+            .filter(Objects::nonNull)
+            .filter(haploid -> haploid.hasValue())
+            .collect(Collectors.toList()));
 
         return haploids;
     }

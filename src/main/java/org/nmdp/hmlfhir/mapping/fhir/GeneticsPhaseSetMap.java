@@ -27,6 +27,7 @@ package org.nmdp.hmlfhir.mapping.fhir;
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.GeneticsPhaseSet;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.Identifier;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.GeneticsPhaseSets;
 import org.nmdp.hmlfhirconvertermodels.dto.*;
 
@@ -49,27 +50,34 @@ public class GeneticsPhaseSetMap implements Converter<Hml, GeneticsPhaseSets> {
 
         for (Sample sample : hml.getSamples()) {
             List<Typing> typings = sample.getTyping();
+            Identifier identifier = new Identifier();
+
+            identifier.setValue(sample.getSampleId());
+            identifier.setSystem(sample.getCenterCode());
 
             for (Typing typing : typings) {
                 ConsensusSequence consensusSequence = typing.getConsensusSequence();
                 List<ConsensusSequenceBlock> consensusSequenceBlocks = consensusSequence.getConsensusSequenceBlocks();
 
                 consensusSequenceBlocks.stream()
-                        .forEach(c -> geneticsPhaseSetList.add(convertConsensusSequenceBlockToGeneticsPhaseSet(c)));
+                        .forEach(c -> geneticsPhaseSetList.add(convertConsensusSequenceBlockToGeneticsPhaseSet(c, identifier)));
             }
         }
 
         geneticsPhaseSets.setGeneticsPhaseSets(geneticsPhaseSetList.stream()
-            .filter(Objects::nonNull).collect(Collectors.toList()));
+            .filter(Objects::nonNull)
+            .filter(geneticsPhaseSet -> geneticsPhaseSet.hasValue())
+            .collect(Collectors.toList()));
 
         return geneticsPhaseSets;
     }
 
-    private GeneticsPhaseSet convertConsensusSequenceBlockToGeneticsPhaseSet(ConsensusSequenceBlock consensusSequenceBlock) {
+    private GeneticsPhaseSet convertConsensusSequenceBlockToGeneticsPhaseSet(ConsensusSequenceBlock consensusSequenceBlock, Identifier identifier) {
         GeneticsPhaseSet geneticsPhaseSet = new GeneticsPhaseSet();
 
         geneticsPhaseSet.setPhasingGroup(consensusSequenceBlock.getPhasingGroup());
         geneticsPhaseSet.setPhaseSet(consensusSequenceBlock.getPhaseSet());
+        geneticsPhaseSet.setIdentifier(identifier);
 
         return geneticsPhaseSet;
     }

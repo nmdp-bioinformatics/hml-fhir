@@ -55,7 +55,7 @@ public class SpecimenMap implements Converter<Sample, Specimen> {
             collection.setMethod(sample.getCollectionMethods().get(0).getName());
         }
 
-        identifier.setValue(sample.getId());
+        identifier.setValue(sample.getSampleId());
         identifier.setSystem(sample.getCenterCode());
         specimen.setIdentifier(identifier);
 

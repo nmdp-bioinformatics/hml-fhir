@@ -26,6 +26,7 @@ package org.nmdp.hmlfhir.mapping.fhir;
 
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.Identifier;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Ssp;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Ssps;
 import org.nmdp.hmlfhirconvertermodels.dto.Hml;
@@ -52,6 +53,10 @@ public class SspMap implements Converter<Hml, Ssps> {
 
         for (Sample sample : hml.getSamples()) {
             List<Typing> typings = sample.getTyping();
+            Identifier identifier = new Identifier();
+
+            identifier.setValue(sample.getSampleId());
+            identifier.setSystem(sample.getCenterCode());
 
             for (Typing typing : typings) {
                 Ssp ssp = new Ssp();
@@ -59,12 +64,14 @@ public class SspMap implements Converter<Hml, Ssps> {
                 org.nmdp.hmlfhirconvertermodels.dto.Ssp nmdpSsp = typingMethod.getSsp();
 
                 ssp.setLocus(nmdpSsp.getLocus());
+                ssp.setIdentifier(identifier);
                 sspList.add(ssp);
             }
         }
 
         ssps.setSsps(sspList.stream()
             .filter(Objects::nonNull)
+            .filter(ssp -> ssp.hasValue())
             .collect(Collectors.toList()));
 
         return ssps;

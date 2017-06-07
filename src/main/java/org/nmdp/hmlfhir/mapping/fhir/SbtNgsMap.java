@@ -27,6 +27,7 @@ package org.nmdp.hmlfhir.mapping.fhir;
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
 import org.nmdp.hmlfhir.mapping.Distinct;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.Identifier;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.SbtNgs;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.SbtNgss;
 import org.nmdp.hmlfhirconvertermodels.dto.Hml;
@@ -52,12 +53,17 @@ public class SbtNgsMap implements Converter<Hml, SbtNgss> {
         Hml hml = context.getSource();
         for (Sample sample : hml.getSamples()) {
             List<Typing> typings = sample.getTyping();
+            Identifier identifier = new Identifier();
+
+            identifier.setSystem(sample.getCenterCode());
+            identifier.setValue(sample.getSampleId());
 
             for (Typing typing : typings) {
                 SbtNgs sbtNgs = new SbtNgs();
                 TypingMethod typingMethod = typing.getTypingMethod();
                 for (org.nmdp.hmlfhirconvertermodels.dto.SbtNgs nmdpSbtNgs : typingMethod.getSbtNgs()) {
                     sbtNgs.setLocus(nmdpSbtNgs.getLocus());
+                    sbtNgs.setIdentifier(identifier);
                     sbtNgsList.add(sbtNgs);
                 }
             }
@@ -66,6 +72,7 @@ public class SbtNgsMap implements Converter<Hml, SbtNgss> {
         sbtNgss.setSbtNgss(sbtNgsList.stream()
                 .filter(Objects::nonNull)
                 .filter(Distinct.distinctByKey(sbtNgs -> sbtNgs.getLocus()))
+                .filter(sbtNgs -> sbtNgs.hasValue())
                 .collect(Collectors.toList()));
 
         return sbtNgss;

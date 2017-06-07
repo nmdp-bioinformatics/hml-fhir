@@ -147,7 +147,7 @@ public class HmlDeserializer extends Deserializer<Hml> {
         sample.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
         sample.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
         sample.setCenterCode(jsonObject.has("centerCode") ? jsonObject.get("centerCode").getAsString() : null);
-        sample.setSampleId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
+        sample.setSampleId(jsonObject.has("sampleId") ? jsonObject.get("sampleId").getAsString() : null);
         sample.setTyping(handleTyping(jsonObject.has("typing") ? jsonObject.get("typing") : null));
         sample.setProperties(handleProperties(jsonObject.has("properties") ? jsonObject.get("properties") : null));
         sample.setCollectionMethods(handleCollectionMethods(jsonObject.has("collectionMethod") ? jsonObject.get("collectionMethod") : null));

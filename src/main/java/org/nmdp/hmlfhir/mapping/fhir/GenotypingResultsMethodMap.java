@@ -28,6 +28,7 @@ import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
 import org.nmdp.hmlfhir.mapping.Distinct;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.GenotypingResultsMethod;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.Identifier;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.GenotypingResultsMethods;
 import org.nmdp.hmlfhirconvertermodels.dto.*;
 
@@ -56,6 +57,7 @@ public class GenotypingResultsMethodMap implements Converter<Hml, GenotypingResu
                 TypingMethod typingMethod = typing.getTypingMethod();
 
                 for (SbtNgs sbtNgs : typingMethod.getSbtNgs()) {
+                    genotypingResultsMethod.setIdentifier(sample.getSampleId());
                     genotypingResultsMethod.setTestId(sbtNgs.getTestId());
                     genotypingResultsMethod.setTestIdSource(sbtNgs.getTestIdSource());
                     genotypingResultsMethodList.add(genotypingResultsMethod);
@@ -68,7 +70,11 @@ public class GenotypingResultsMethodMap implements Converter<Hml, GenotypingResu
                         GenotypingResultsMethod::getTestId,
                         GenotypingResultsMethod::getTestIdSource);
 
-        genotypingResultsMethods.setGenotypingResultsMethods(distinctGenotypingResultsMethodList);
+        genotypingResultsMethods.setGenotypingResultsMethods(distinctGenotypingResultsMethodList.stream()
+            .filter(Objects::nonNull)
+            .filter(genotypingResultsMethod -> genotypingResultsMethod.hasValue())
+            .collect(Collectors.toList()));
+
         return genotypingResultsMethods;
     }
 }

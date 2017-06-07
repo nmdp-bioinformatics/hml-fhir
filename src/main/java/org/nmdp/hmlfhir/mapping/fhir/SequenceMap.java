@@ -54,7 +54,10 @@ public class SequenceMap implements Converter<Hml, Sequences> {
             sequenceList.addAll(createConsensusSequences(sample));
         }
 
-        sequences.setSequences(sequenceList);
+        sequences.setSequences(sequenceList.stream()
+            .filter(Objects::nonNull)
+            .filter(sequence -> sequence.hasValue())
+            .collect(Collectors.toList()));
 
         return sequences;
     }
@@ -118,6 +121,7 @@ public class SequenceMap implements Converter<Hml, Sequences> {
                 org.nmdp.hmlfhirconvertermodels.domain.fhir.Variant variant = new org.nmdp.hmlfhirconvertermodels.domain.fhir.Variant();
                 Quality quality = new Quality();
                 Score score = new Score();
+                Identifier identifier = new Identifier();
 
                 variant.setStart(var.getStart());
                 variant.setEnd(var.getEnd());
@@ -127,6 +131,9 @@ public class SequenceMap implements Converter<Hml, Sequences> {
                 quality.setScore(score);
                 quality.setStart(sequenceQuality.getSequenceStart());
                 quality.setEnd(sequenceQuality.getSequenceEnd());
+                identifier.setValue(sample.getSampleId());
+                identifier.setSystem(sample.getCenterCode());
+                sequence.setIdentifier(identifier);
                 sequence.setQuality(quality);
                 sequence.setObservedSeq(seq.getSequence());
                 sequence.setReferenceSeq(createReferenceSequence(consensusSequence.getReferenceDatabase()));

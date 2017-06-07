@@ -30,6 +30,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.MappingContext;
 import org.nmdp.hmlfhir.mapping.Distinct;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Code;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.Identifier;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Observation;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Specimen;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Observations;
@@ -59,6 +60,10 @@ public class ObservationMap implements Converter<Hml, Observations> {
 
             Specimen specimen = mapper.map(sample, Specimen.class);
             List<Typing> typings = sample.getTyping();
+            Identifier identifier = new Identifier();
+
+            identifier.setValue(sample.getSampleId());
+            identifier.setSystem(sample.getCenterCode());
 
             for (Typing typing : typings) {
                 Observation observation = new Observation();
@@ -67,11 +72,15 @@ public class ObservationMap implements Converter<Hml, Observations> {
                 code.setName(typing.getGeneFamily());
                 observation.setCode(code);
                 observation.setSpecimen(specimen);
+                observation.setIdentifier(identifier);
                 observationList.add(observation);
             }
         }
 
-        observations.setObservations(observationList);
+        observations.setObservations(observationList.stream()
+            .filter(Objects::nonNull)
+            .filter(observation -> observation.hasValue())
+            .collect(Collectors.toList()));
 
         return observations;
     }

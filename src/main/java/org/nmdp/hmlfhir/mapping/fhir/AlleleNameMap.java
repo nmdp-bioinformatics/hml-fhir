@@ -27,11 +27,14 @@ package org.nmdp.hmlfhir.mapping.fhir;
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.AlleleName;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.Identifier;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.AlleleNames;
 import org.nmdp.hmlfhirconvertermodels.dto.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class AlleleNameMap implements Converter<Hml, AlleleNames> {
 
@@ -60,6 +63,7 @@ public class AlleleNameMap implements Converter<Hml, AlleleNames> {
                                 AlleleName alleleName = new AlleleName();
 
                                 alleleName.setName(allele.getName());
+                                alleleName.setIdentifier(sample.getSampleId());
                                 alleleNameList.add(alleleName);
                             }
                         }
@@ -68,7 +72,10 @@ public class AlleleNameMap implements Converter<Hml, AlleleNames> {
             }
         }
 
-        alleleNames.setAlleleNames(alleleNameList);
+        alleleNames.setAlleleNames(alleleNameList.stream()
+            .filter(Objects::nonNull)
+            .filter(alleleName -> alleleName.hasValue())
+            .collect(Collectors.toList()));
 
         return alleleNames;
     }

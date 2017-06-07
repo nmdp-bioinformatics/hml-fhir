@@ -63,6 +63,7 @@ public class GenotypingResultsHaploidMap implements Converter<Hml, GenotypingRes
                         fhirType.setLocus(haploid.getLocus());
                         fhirType.setMethod(haploid.getMethod());
                         genotypingResultsHaploid.setType(fhirType);
+                        genotypingResultsHaploid.setIdentifier(sample.getSampleId());
                         genotypingResultsHaploidList.add(genotypingResultsHaploid);
                     }
                 }
@@ -70,7 +71,9 @@ public class GenotypingResultsHaploidMap implements Converter<Hml, GenotypingRes
         }
 
         genotypingResultsHaploids.setGenotypingResultsHaploids(genotypingResultsHaploidList.stream()
-            .filter(Objects::nonNull).collect(Collectors.toList()));
+            .filter(Objects::nonNull)
+            .filter(genotypingResultsHaploid -> genotypingResultsHaploid.hasValue())
+            .collect(Collectors.toList()));
 
         return genotypingResultsHaploids;
     }

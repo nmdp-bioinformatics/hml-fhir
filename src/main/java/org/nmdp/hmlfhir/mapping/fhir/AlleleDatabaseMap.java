@@ -61,6 +61,7 @@ public class AlleleDatabaseMap implements Converter<Hml, AlleleDatabases> {
 
                     alleleDatabase.setName(alleleAssignment.getAlleleDb());
                     alleleDatabase.setVersion(alleleAssignment.getAlleleVersion());
+                    alleleDatabase.setIdentifier(sample.getSampleId());
                     alleleDatabaseList.add(alleleDatabase);
                 }
             }
@@ -70,6 +71,7 @@ public class AlleleDatabaseMap implements Converter<Hml, AlleleDatabases> {
         alleleDatabases.setAlleleDatabases(alleleDatabaseList.stream()
                 .filter(Objects::nonNull)
                 .filter(Distinct.distinctByKey(alleleDatabase -> alleleDatabase.getName()))
+                .filter(alleleDatabase -> alleleDatabase.hasValue())
                 .collect(Collectors.toList()));
 
         return alleleDatabases;
