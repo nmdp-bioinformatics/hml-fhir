@@ -7,7 +7,7 @@
     <groupId>org.nmdp</groupId>
     <artifactId>hml-fhir</artifactId>
     <packaging>jar</packaging>
-    <version>1.3.28-SNAPSHOT</version>
+    <version>1.3.30-SNAPSHOT</version>
     
     <properties>
     	<swagger-codegen-version>2.2.2</swagger-codegen-version>

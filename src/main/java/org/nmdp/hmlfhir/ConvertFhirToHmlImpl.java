@@ -35,6 +35,7 @@ import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.nmdp.hmlfhir.deserialization.Deserializer;
 import org.nmdp.hmlfhir.mapping.hml.*;
+import org.nmdp.hmlfhir.mapping.object.HmlMessageToHml;
 import org.nmdp.hmlfhirconvertermodels.HmlMessage;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage;
 import org.nmdp.hmlfhirconvertermodels.dto.Hml;
@@ -148,9 +149,7 @@ public class ConvertFhirToHmlImpl extends Convert implements ConvertFhirToHml {
         hmlMessage.setSsos(mapper.map(fhir, Ssos.class));
         hmlMessage.setSsps(mapper.map(fhir, Ssps.class));
 
-        // TODO: convert this hmlMessage into a logical HML
-
-        return hmlMessage.getPatientHml();
+        return HmlMessageToHml.toDto(hmlMessage);
     }
 
     private ModelMapper createMapper() {

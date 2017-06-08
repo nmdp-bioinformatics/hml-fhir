@@ -27,6 +27,7 @@ package org.nmdp.hmlfhir.mapping.object;
 import org.nmdp.hmlfhirconvertermodels.HmlMessage;
 import org.nmdp.hmlfhirconvertermodels.dto.*;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,9 +35,9 @@ import java.util.stream.Collectors;
 
 public class HmlMessageToHml {
 
-    public Hml toDto(HmlMessage hmlMessage) {
-        Hml hml = new Hml();
-        hml = hmlMessage.getPatientHml();
+    public static Hml toDto(HmlMessage hmlMessage) {
+        Hml hml = hmlMessage.getPatientHml();
+        List<Sample> reconstructedSamples = new ArrayList<>();
         List<Sample> observationSamples = hmlMessage.getObservationSamples().getSamples();
 
         for (Sample observationSample : observationSamples) {
@@ -52,13 +53,20 @@ public class HmlMessageToHml {
                         sampleId));
                 observationTyping.setConsensusSequence(getTypingConsensusSequence(
                         hmlMessage.getGeneticsPhaseSetSamples().getSamples(), hmlMessage.getSequenceSamples().getSamples(),
-                        sampleId);
+                        sampleId));
             }
+
+            reconstructedSamples.add(observationSample);
         }
 
+        hml.setSamples(reconstructedSamples);
+        hml.setReportingCenters(hmlMessage.getOrganizationReportingCenters().getReportingCenters());
+        hml.setHmlId(hmlMessage.getHmlId());
+
+        return hml;
     }
 
-    private List<Typing> getSampleTypings(List<Sample> samples, String sampleId) {
+    private static List<Typing> getSampleTypings(List<Sample> samples, String sampleId) {
         return samples.stream()
                 .filter(Objects::nonNull)
                 .filter(sample -> sample.getSampleId().equals(sampleId))
@@ -69,10 +77,9 @@ public class HmlMessageToHml {
                         .collect(Collectors.toList());
     }
 
-    private List<AlleleAssignment> getTypingAlleleAssignments(List<Sample> haploidSamples, List<Sample> glStringSamples,
+    private static List<AlleleAssignment> getTypingAlleleAssignments(List<Sample> haploidSamples, List<Sample> glStringSamples,
         List<Sample> alleleDatabaseSamples, List<Sample> alleleNameSamples, List<Sample> genotypingResultsHaploidSamples,
         String sampleId) {
-        List<AlleleAssignment> alleleAssignments = new ArrayList<>();
         AlleleAssignment alleleAssignment = new AlleleAssignment();
         List<Sample> filteredHaploidSamples = haploidSamples.stream()
                 .filter(Objects::nonNull)
@@ -95,13 +102,16 @@ public class HmlMessageToHml {
                 .filter(sample -> sample.getSampleId().equals(sampleId))
                 .collect(Collectors.toList());
 
-        alleleAssignment.setHaploid(getAlleleAssignmentHaploids(filteredHaploidSamples));
+        alleleAssignment.setHaploid(getAlleleAssignmentHaploids(filteredHaploidSamples, filteredGenotypingResultsHaploidSamples));
         alleleAssignment.setGlString(getAlleleAssignmentGlStrings(filteredGlStringSamples));
+        setAlleleAssignmentAlleleDatabase(filteredAlleleDatabaseSamples, alleleAssignment);
+        alleleAssignment.setGenotypes(getAlleleAssignmentGenotypes(filteredAlleleNameSamples));
 
+        return Arrays.asList(alleleAssignment);
     }
 
-    private List<Haploid> getAlleleAssignmentHaploids(List<Sample> samples) {
-        return samples.stream()
+    private static List<Haploid> getAlleleAssignmentHaploids(List<Sample> samples, List<Sample> xSamples) {
+        List<Haploid> haploidList = samples.stream()
                 .filter(Objects::nonNull)
                 .map(sample -> sample.getTyping())
                 .flatMap(typings -> typings.stream())
@@ -114,9 +124,25 @@ public class HmlMessageToHml {
                         .map(alleleAssignment -> alleleAssignment.getHaploid())
                         .flatMap(haploids -> haploids.stream())
                         .collect(Collectors.toList());
+
+        haploidList.addAll(xSamples.stream()
+            .filter(Objects::nonNull)
+            .map(sample -> sample.getTyping())
+            .flatMap(typings -> typings.stream())
+            .collect(Collectors.toList()).stream()
+                .filter(Objects::nonNull)
+                .map(typing -> typing.getAlleleAssignment())
+                .flatMap(alleleAssignments -> alleleAssignments.stream())
+                .collect(Collectors.toList()).stream()
+                    .filter(Objects::nonNull)
+                    .map(alleleAssignment -> alleleAssignment.getHaploid())
+                    .flatMap(haploids -> haploids.stream())
+                    .collect(Collectors.toList()));
+
+        return haploidList;
     }
 
-    private List<GlString> getAlleleAssignmentGlStrings(List<Sample> samples) {
+    private static GlString getAlleleAssignmentGlStrings(List<Sample> samples) {
         return samples.stream()
                 .filter(Objects::nonNull)
                 .map(sample -> sample.getTyping())
@@ -128,21 +154,100 @@ public class HmlMessageToHml {
                     .collect(Collectors.toList()).stream()
                         .filter(Objects::nonNull)
                         .map(alleleAssignment -> alleleAssignment.getGlString())
+                        .findFirst()
+                        .get();
+    }
+
+    private static void setAlleleAssignmentAlleleDatabase(List<Sample> samples, AlleleAssignment alleleAssignment) {
+        AlleleAssignment fhirAlleleAssignment = samples.stream()
+                .filter(Objects::nonNull)
+                .map(sample -> sample.getTyping())
+                .flatMap(typings -> typings.stream())
+                .collect(Collectors.toList()).stream()
+                    .filter(Objects::nonNull)
+                    .map(typing -> typing.getAlleleAssignment())
+                    .flatMap(alleleAssignments -> alleleAssignments.stream())
+                    .findFirst()
+                    .get();
+
+        alleleAssignment.setAlleleDb(fhirAlleleAssignment.getAlleleDb());
+        alleleAssignment.setAlleleVersion(fhirAlleleAssignment.getAlleleVersion());
+    }
+
+    private static List<Genotype> getAlleleAssignmentGenotypes(List<Sample> samples) {
+        return samples.stream()
+                .filter(Objects::nonNull)
+                .map(sample -> sample.getTyping())
+                .flatMap(typings -> typings.stream())
+                .collect(Collectors.toList()).stream()
+                    .filter(Objects::nonNull)
+                    .map(typing -> typing.getAlleleAssignment())
+                    .flatMap(alleleAssignments -> alleleAssignments.stream())
+                    .collect(Collectors.toList()).stream()
+                        .filter(Objects::nonNull)
+                        .map(alleleAssignment -> alleleAssignment.getGenotypes())
+                        .flatMap(genotypes -> genotypes.stream())
                         .collect(Collectors.toList());
     }
 
-    private TypingMethod getTypingTypingMethod(List<Ssp> ssps, List<Sso> ssos, List<SbtNgs> sbtNgss,
+    private static TypingMethod getTypingTypingMethod(List<Ssp> ssps, List<Sso> ssos, List<SbtNgs> sbtNgss,
         List<Sample> gentoypingResultsMethodSamples, String sampleId) {
         sbtNgss = getTypingTypingMethodSbtNgss(sbtNgss, gentoypingResultsMethodSamples, sampleId);
+        TypingMethod typingMethod = new TypingMethod();
+        Sso sso = ssos.stream().filter(Objects::nonNull).findFirst().get();
+        Ssp ssp = ssps.stream().filter(Objects::nonNull).findFirst().get();
+
+        typingMethod.setSbtNgs(sbtNgss);
+        typingMethod.setSso(sso);
+        typingMethod.setSsp(ssp);
+
+        return typingMethod;
     }
 
-    private List<SbtNgs> getTypingTypingMethodSbtNgss(List<SbtNgs> sbtNgss, List<Sample> gentoypingResultsMethodSamples, String sampleId) {
-
+    private static List<SbtNgs> getTypingTypingMethodSbtNgss(List<SbtNgs> sbtNgss, List<Sample> gentoypingResultsMethodSamples, String sampleId) {
+        sbtNgss.addAll(gentoypingResultsMethodSamples.stream()
+                .filter(Objects::nonNull)
+                .filter(sample -> sample.getSampleId().equals(sampleId))
+                .map(sample -> sample.getTyping())
+                .flatMap(typings -> typings.stream())
+                .collect(Collectors.toList()).stream()
+                    .filter(Objects::nonNull)
+                    .map(typing -> typing.getTypingMethod())
+                    .collect(Collectors.toList()).stream()
+                        .filter(Objects::nonNull)
+                        .map(typingMethod -> typingMethod.getSbtNgs())
+                        .flatMap(typingMethods -> typingMethods.stream())
+                        .collect(Collectors.toList()));
 
         return sbtNgss;
     }
 
-    private ConsensusSequence getTypingConsensusSequence(List<Sample> geneticsPhaseSetSamples, List<Sample> sequenceSamples, String sampleId) {
+    private static ConsensusSequence getTypingConsensusSequence(List<Sample> geneticsPhaseSetSamples, List<Sample> sequenceSamples, String sampleId) {
+        ConsensusSequence consensusSequence = sequenceSamples.stream()
+            .filter(Objects::nonNull)
+            .filter(sample -> sample.getSampleId().equals(sampleId))
+            .map(sample -> sample.getTyping())
+            .flatMap(typings -> typings.stream())
+            .collect(Collectors.toList()).stream()
+                .filter(Objects::nonNull)
+                .map(typing -> typing.getConsensusSequence())
+                .findFirst().get();
+        List<ConsensusSequenceBlock> consensusSequenceBlockList = geneticsPhaseSetSamples.stream()
+            .filter(Objects::nonNull)
+            .filter(sample -> sample.getSampleId().equals(sampleId))
+            .map(sample -> sample.getTyping())
+            .flatMap(typings -> typings.stream())
+            .collect(Collectors.toList()).stream()
+                .filter(Objects::nonNull)
+                .map(typing -> typing.getConsensusSequence())
+                .collect(Collectors.toList()).stream()
+                    .filter(Objects::nonNull)
+                    .map(consensusSeq -> consensusSeq.getConsensusSequenceBlocks())
+                    .flatMap(consensusSequenceBlock -> consensusSequenceBlock.stream())
+                    .collect(Collectors.toList());
 
+        consensusSequence.setConsensusSequenceBlocks(consensusSequenceBlockList);
+
+        return consensusSequence;
     }
 }
