@@ -38,21 +38,17 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class SequenceMap implements Converter<Hml, Sequences> {
+public class SequenceMap implements Converter<Typing, Sequences> {
 
     @Override
-    public Sequences convert(MappingContext<Hml, Sequences> context) {
+    public Sequences convert(MappingContext<Typing, Sequences> context) {
         if (context.getSource() == null) {
             return null;
         }
 
         Sequences sequences = new Sequences();
-        Hml hml = context.getSource();
-        List<Sequence> sequenceList = new ArrayList<>();
-
-        for (Sample sample : hml.getSamples()) {
-            sequenceList.addAll(createConsensusSequences(sample));
-        }
+        Typing typing = context.getSource();
+        List<Sequence> sequenceList = createConsensusSequences(typing);
 
         sequences.setSequences(sequenceList.stream()
             .filter(Objects::nonNull)
@@ -104,42 +100,38 @@ public class SequenceMap implements Converter<Hml, Sequences> {
         return backboneElement;
     }
 
-    private List<Sequence> createConsensusSequences(Sample sample) {
+    private List<Sequence> createConsensusSequences(Typing typing) {
         List<Sequence> sequences = new ArrayList<>();
+        ConsensusSequence consensusSequence = typing.getConsensusSequence();
 
-        if (sample == null) {
+        if (typing == null) {
             return null;
         }
 
-        for (Typing typing : sample.getTyping()) {
-            ConsensusSequence consensusSequence = typing.getConsensusSequence();
-            for (ConsensusSequenceBlock consensusSequenceBlock : consensusSequence.getConsensusSequenceBlocks()) {
-                org.nmdp.hmlfhirconvertermodels.dto.Sequence seq = consensusSequenceBlock.getSequence();
-                org.nmdp.hmlfhirconvertermodels.dto.Variant var = consensusSequenceBlock.getVariant();
-                Sequence sequence = new Sequence();
-                SequenceQuality sequenceQuality = consensusSequenceBlock.getSequenceQuality();
-                org.nmdp.hmlfhirconvertermodels.domain.fhir.Variant variant = new org.nmdp.hmlfhirconvertermodels.domain.fhir.Variant();
-                Quality quality = new Quality();
-                Score score = new Score();
-                Identifier identifier = new Identifier();
+        for (ConsensusSequenceBlock consensusSequenceBlock : consensusSequence.getConsensusSequenceBlocks()) {
+            org.nmdp.hmlfhirconvertermodels.dto.Sequence seq = consensusSequenceBlock.getSequence();
+            org.nmdp.hmlfhirconvertermodels.dto.Variant var = consensusSequenceBlock.getVariant();
+            Sequence sequence = new Sequence();
+            SequenceQuality sequenceQuality = consensusSequenceBlock.getSequenceQuality();
+            org.nmdp.hmlfhirconvertermodels.domain.fhir.Variant variant = new org.nmdp.hmlfhirconvertermodels.domain.fhir.Variant();
+            Quality quality = new Quality();
+            Score score = new Score();
+            Identifier identifier = new Identifier();
 
-                variant.setStart(var.getStart());
-                variant.setEnd(var.getEnd());
-                variant.setReferenceAllele(var.getReferenceBases());
-                variant.setObservedAllele(var.getAlternateBases());
-                score.setValue(var.getQualityScore());
-                quality.setScore(score);
-                quality.setStart(sequenceQuality.getSequenceStart());
-                quality.setEnd(sequenceQuality.getSequenceEnd());
-                identifier.setValue(sample.getSampleId());
-                identifier.setSystem(sample.getCenterCode());
-                sequence.setIdentifier(identifier);
-                sequence.setQuality(quality);
-                sequence.setObservedSeq(seq.getSequence());
-                sequence.setReferenceSeq(createReferenceSequence(consensusSequence.getReferenceDatabase()));
+            variant.setStart(var.getStart());
+            variant.setEnd(var.getEnd());
+            variant.setReferenceAllele(var.getReferenceBases());
+            variant.setObservedAllele(var.getAlternateBases());
+            score.setValue(var.getQualityScore());
+            quality.setScore(score);
+            quality.setStart(sequenceQuality.getSequenceStart());
+            quality.setEnd(sequenceQuality.getSequenceEnd());
+            sequence.setIdentifier(identifier);
+            sequence.setQuality(quality);
+            sequence.setObservedSeq(seq.getSequence());
+            sequence.setReferenceSeq(createReferenceSequence(consensusSequence.getReferenceDatabase()));
 
-                sequences.add(sequence);
-            }
+            sequences.add(sequence);
         }
 
         return sequences;

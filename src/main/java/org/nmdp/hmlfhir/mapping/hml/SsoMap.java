@@ -44,13 +44,13 @@ public class SsoMap implements Converter<FhirMessage, Ssos> {
         Ssos ssos = new Ssos();
         List<Sso> ssoList = new ArrayList<>();
         FhirMessage fhir = context.getSource();
-        org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Ssos fhirSsos = fhir.getSsos();
-
-        for (org.nmdp.hmlfhirconvertermodels.domain.fhir.Sso fhirSso : fhirSsos.getSsos()) {
-            Sso sso = new Sso();
-            sso.setLocus(fhirSso.getLocus());
-            ssoList.add(sso);
-        }
+//        org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Ssos fhirSsos = fhir.getSsos();
+//
+//        for (org.nmdp.hmlfhirconvertermodels.domain.fhir.Sso fhirSso : fhirSsos.getSsos()) {
+//            Sso sso = new Sso();
+//            sso.setLocus(fhirSso.getLocus());
+//            ssoList.add(sso);
+//        }
 
         ssos.setSsos(ssoList);
 

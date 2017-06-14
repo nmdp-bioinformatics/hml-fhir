@@ -37,36 +37,26 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class GlStringMap implements Converter<Hml, Glstrings> {
+public class GlStringMap implements Converter<Typing, Glstrings> {
 
     @Override
-    public Glstrings convert(MappingContext<Hml, Glstrings> context) {
+    public Glstrings convert(MappingContext<Typing, Glstrings> context) {
         if (context.getSource() == null) {
             return null;
         }
 
         Glstrings glstrings = new Glstrings();
-        Hml hml = context.getSource();
+        Typing typing = context.getSource();
         List<Glstring> glstringList = new ArrayList<>();
+        List<AlleleAssignment> alleleAssignments = typing.getAlleleAssignment();
 
-        for (Sample sample : hml.getSamples()) {
-            List<Typing> typings = sample.getTyping();
+        for (AlleleAssignment alleleAssignment : alleleAssignments) {
+            Glstring glstring = new Glstring();
+            GlString glString = alleleAssignment.getGlString();
 
-            for (Typing typing : typings) {
-                List<AlleleAssignment> alleleAssignments = typing.getAlleleAssignment();
-                for (AlleleAssignment alleleAssignment : alleleAssignments) {
-                    Glstring glstring = new Glstring();
-                    GlString glString = alleleAssignment.getGlString();
-                    Identifier identifier = new Identifier();
-
-                    identifier.setSystem(sample.getCenterCode());
-                    identifier.setValue(sample.getSampleId());
-                    glstring.setUri(glString.getUri());
-                    glstring.setValue(glString.getValue());
-                    glstring.setIdentifier(sample.getSampleId());
-                    glstringList.add(glstring);
-                }
-            }
+            glstring.setUri(glString.getUri());
+            glstring.setValue(glString.getValue());
+            glstringList.add(glstring);
         }
 
         glstrings.setGlstrings(glstringList.stream()

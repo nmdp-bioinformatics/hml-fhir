@@ -51,21 +51,21 @@ public class GlStringMap implements Converter<FhirMessage, Samples> {
         Samples samples = new Samples();
         List<Sample> sampleList = new ArrayList<>();
         FhirMessage fhir = context.getSource();
-        Glstrings glStrings = fhir.getGlstrings();
-
-        for (Glstring glstring : glStrings.getGlstrings()) {
-            GlString glString = new GlString();
-            AlleleAssignment alleleAssignment = new AlleleAssignment();
-            Typing typing = new Typing();
-            Sample sample = new Sample();
-
-            glString.setValue(glstring.getValue());
-            glString.setUri(glstring.getUri());
-            alleleAssignment.setGlString(glString);
-            typing.setAlleleAssignment(Arrays.asList(alleleAssignment));
-            sample.setTyping(Arrays.asList(typing));
-            sampleList.add(sample);
-        }
+//        Glstrings glStrings = fhir.getGlstrings();
+//
+//        for (Glstring glstring : glStrings.getGlstrings()) {
+//            GlString glString = new GlString();
+//            AlleleAssignment alleleAssignment = new AlleleAssignment();
+//            Typing typing = new Typing();
+//            Sample sample = new Sample();
+//
+//            glString.setValue(glstring.getValue());
+//            glString.setUri(glstring.getUri());
+//            alleleAssignment.setGlString(glString);
+//            typing.setAlleleAssignment(Arrays.asList(alleleAssignment));
+//            sample.setTyping(Arrays.asList(typing));
+//            sampleList.add(sample);
+//        }
 
         samples.setSamples(sampleList);
 

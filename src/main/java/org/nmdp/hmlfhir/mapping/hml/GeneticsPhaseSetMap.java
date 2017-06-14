@@ -49,21 +49,21 @@ public class GeneticsPhaseSetMap implements Converter<FhirMessage, Samples> {
         Samples samples = new Samples();
         List<Sample> sampleList = new ArrayList<>();
         FhirMessage fhir = context.getSource();
-        GeneticsPhaseSets geneticsPhaseSets = fhir.getGeneticsPhaseSets();
-
-        for (GeneticsPhaseSet geneticsPhaseSet : geneticsPhaseSets.getGeneticsPhaseSets()) {
-            ConsensusSequenceBlock consensusSequenceBlock = new ConsensusSequenceBlock();
-            ConsensusSequence consensusSequence = new ConsensusSequence();
-            Typing typing = new Typing();
-            Sample sample = new Sample();
-
-            consensusSequenceBlock.setPhasingGroup(geneticsPhaseSet.getPhasingGroup());
-            consensusSequenceBlock.setPhaseSet(geneticsPhaseSet.getPhaseSet());
-            consensusSequence.setConsensusSequenceBlocks(Arrays.asList(consensusSequenceBlock));
-            typing.setConsensusSequence(consensusSequence);
-            sample.setTyping(Arrays.asList(typing));
-            sampleList.add(sample);
-        }
+//        GeneticsPhaseSets geneticsPhaseSets = fhir.getGeneticsPhaseSets();
+//
+//        for (GeneticsPhaseSet geneticsPhaseSet : geneticsPhaseSets.getGeneticsPhaseSets()) {
+//            ConsensusSequenceBlock consensusSequenceBlock = new ConsensusSequenceBlock();
+//            ConsensusSequence consensusSequence = new ConsensusSequence();
+//            Typing typing = new Typing();
+//            Sample sample = new Sample();
+//
+//            consensusSequenceBlock.setPhasingGroup(geneticsPhaseSet.getPhasingGroup());
+//            consensusSequenceBlock.setPhaseSet(geneticsPhaseSet.getPhaseSet());
+//            consensusSequence.setConsensusSequenceBlocks(Arrays.asList(consensusSequenceBlock));
+//            typing.setConsensusSequence(consensusSequence);
+//            sample.setTyping(Arrays.asList(typing));
+//            sampleList.add(sample);
+//        }
 
         samples.setSamples(sampleList);
 

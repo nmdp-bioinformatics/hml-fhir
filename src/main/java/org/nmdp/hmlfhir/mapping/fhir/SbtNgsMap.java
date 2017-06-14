@@ -40,39 +40,29 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class SbtNgsMap implements Converter<Hml, SbtNgss> {
+public class SbtNgsMap implements Converter<Typing, SbtNgss> {
 
     @Override
-    public SbtNgss convert(MappingContext<Hml, SbtNgss> context) {
+    public SbtNgss convert(MappingContext<Typing, SbtNgss> context) {
         if (context.getSource() == null) {
             return null;
         }
 
         SbtNgss sbtNgss = new SbtNgss();
         List<SbtNgs> sbtNgsList = new ArrayList<>();
-        Hml hml = context.getSource();
-        for (Sample sample : hml.getSamples()) {
-            List<Typing> typings = sample.getTyping();
-            Identifier identifier = new Identifier();
+        Typing typing = context.getSource();
+        SbtNgs sbtNgs = new SbtNgs();
+        TypingMethod typingMethod = typing.getTypingMethod();
 
-            identifier.setSystem(sample.getCenterCode());
-            identifier.setValue(sample.getSampleId());
-
-            for (Typing typing : typings) {
-                SbtNgs sbtNgs = new SbtNgs();
-                TypingMethod typingMethod = typing.getTypingMethod();
-                for (org.nmdp.hmlfhirconvertermodels.dto.SbtNgs nmdpSbtNgs : typingMethod.getSbtNgs()) {
-                    sbtNgs.setLocus(nmdpSbtNgs.getLocus());
-                    sbtNgs.setIdentifier(identifier);
-                    sbtNgsList.add(sbtNgs);
-                }
-            }
+        for (org.nmdp.hmlfhirconvertermodels.dto.SbtNgs nmdpSbtNgs : typingMethod.getSbtNgs()) {
+            sbtNgs.setLocus(nmdpSbtNgs.getLocus());
+            sbtNgsList.add(sbtNgs);
         }
 
         sbtNgss.setSbtNgss(sbtNgsList.stream()
                 .filter(Objects::nonNull)
-                .filter(Distinct.distinctByKey(sbtNgs -> sbtNgs.getLocus()))
-                .filter(sbtNgs -> sbtNgs.hasValue())
+                .filter(Distinct.distinctByKey(s -> s.getLocus()))
+                .filter(s -> s.hasValue())
                 .collect(Collectors.toList()));
 
         return sbtNgss;

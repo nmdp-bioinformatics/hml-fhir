@@ -41,35 +41,28 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class HaploidMap implements Converter<Hml, Haploids> {
+public class HaploidMap implements Converter<Typing, Haploids> {
 
     @Override
-    public Haploids convert(MappingContext<Hml, Haploids> context) {
+    public Haploids convert(MappingContext<Typing, Haploids> context) {
         if (context.getSource() == null) {
             return null;
         }
 
         Haploids haploids = new Haploids();
         List<Haploid> haploidList = new ArrayList<>();
-        Hml hml = context.getSource();
+        Typing typing = context.getSource();
 
-        for (Sample sample : hml.getSamples()) {
-            List<Typing> typings = sample.getTyping();
+        List<AlleleAssignment> alleleAssignments = typing.getAlleleAssignment();
+        for (AlleleAssignment alleleAssignment : alleleAssignments) {
+            List<org.nmdp.hmlfhirconvertermodels.dto.Haploid> nmdpHaploids = alleleAssignment.getHaploid();
+            for (org.nmdp.hmlfhirconvertermodels.dto.Haploid haploid : nmdpHaploids) {
+                Haploid fhirHaploid = new Haploid();
 
-            for (Typing typing : typings) {
-                List<AlleleAssignment> alleleAssignments = typing.getAlleleAssignment();
-                for (AlleleAssignment alleleAssignment : alleleAssignments) {
-                    List<org.nmdp.hmlfhirconvertermodels.dto.Haploid> nmdpHaploids = alleleAssignment.getHaploid();
-                    for (org.nmdp.hmlfhirconvertermodels.dto.Haploid haploid : nmdpHaploids) {
-                        Haploid fhirHaploid = new Haploid();
-
-                        fhirHaploid.setLocus(haploid.getLocus());
-                        fhirHaploid.setMethod(haploid.getMethod());
-                        fhirHaploid.setHaploidType(haploid.getType());
-                        fhirHaploid.setIdentifier(sample.getSampleId());
-                        haploidList.add(fhirHaploid);
-                    }
-                }
+                fhirHaploid.setLocus(haploid.getLocus());
+                fhirHaploid.setMethod(haploid.getMethod());
+                fhirHaploid.setHaploidType(haploid.getType());
+                haploidList.add(fhirHaploid);
             }
         }
 

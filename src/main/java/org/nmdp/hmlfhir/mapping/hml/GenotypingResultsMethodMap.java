@@ -48,21 +48,21 @@ public class GenotypingResultsMethodMap implements Converter<FhirMessage, Sample
         Samples samples = new Samples();
         List<Sample> sampleList = new ArrayList<>();
         FhirMessage fhir = context.getSource();
-        GenotypingResultsMethods genotypingResultsMethods = fhir.getGenotypingResultsMethods();
-
-        for (GenotypingResultsMethod genotypingResultsMethod : genotypingResultsMethods.getGenotypingResultsMethods()) {
-            SbtNgs sbtNgs = new SbtNgs();
-            TypingMethod typingMethod = new TypingMethod();
-            Typing typing = new Typing();
-            Sample sample = new Sample();
-
-            sbtNgs.setTestId(genotypingResultsMethod.getTestId());
-            sbtNgs.setTestIdSource(genotypingResultsMethod.getTestIdSource());
-            typingMethod.setSbtNgs(Arrays.asList(sbtNgs));
-            typing.setTypingMethod(typingMethod);
-            sample.setTyping(Arrays.asList(typing));
-            sampleList.add(sample);
-        }
+//        GenotypingResultsMethods genotypingResultsMethods = fhir.getGenotypingResultsMethods();
+//
+//        for (GenotypingResultsMethod genotypingResultsMethod : genotypingResultsMethods.getGenotypingResultsMethods()) {
+//            SbtNgs sbtNgs = new SbtNgs();
+//            TypingMethod typingMethod = new TypingMethod();
+//            Typing typing = new Typing();
+//            Sample sample = new Sample();
+//
+//            sbtNgs.setTestId(genotypingResultsMethod.getTestId());
+//            sbtNgs.setTestIdSource(genotypingResultsMethod.getTestIdSource());
+//            typingMethod.setSbtNgs(Arrays.asList(sbtNgs));
+//            typing.setTypingMethod(typingMethod);
+//            sample.setTyping(Arrays.asList(typing));
+//            sampleList.add(sample);
+//        }
 
         samples.setSamples(sampleList);
 

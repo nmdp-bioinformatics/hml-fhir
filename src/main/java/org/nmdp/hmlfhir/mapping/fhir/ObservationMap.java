@@ -28,13 +28,8 @@ package org.nmdp.hmlfhir.mapping.fhir;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.MappingContext;
-import org.nmdp.hmlfhir.mapping.Distinct;
-import org.nmdp.hmlfhirconvertermodels.domain.fhir.Code;
-import org.nmdp.hmlfhirconvertermodels.domain.fhir.Identifier;
-import org.nmdp.hmlfhirconvertermodels.domain.fhir.Observation;
-import org.nmdp.hmlfhirconvertermodels.domain.fhir.Specimen;
-import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Observations;
-import org.nmdp.hmlfhirconvertermodels.dto.Hml;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.*;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.*;
 import org.nmdp.hmlfhirconvertermodels.dto.Sample;
 import org.nmdp.hmlfhirconvertermodels.dto.Typing;
 
@@ -43,10 +38,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class ObservationMap implements Converter<Hml, Observations> {
+public class ObservationMap implements Converter<Sample, Observations> {
 
     @Override
-    public Observations convert(MappingContext<Hml, Observations> context) {
+    public Observations convert(MappingContext<Sample, Observations> context) {
         if (context.getSource() == null) {
             return null;
         }
@@ -54,27 +49,28 @@ public class ObservationMap implements Converter<Hml, Observations> {
         ModelMapper mapper = createMapper();
         Observations observations = new Observations();
         List<Observation> observationList = new ArrayList<>();
-        Hml hml = context.getSource();
+        Sample sample = context.getSource();
 
-        for (Sample sample : hml.getSamples()) {
+        for (Typing typing : sample.getTyping()) {
 
-            Specimen specimen = mapper.map(sample, Specimen.class);
-            List<Typing> typings = sample.getTyping();
+            Observation observation = new Observation();
             Identifier identifier = new Identifier();
+            Code code = new Code();
 
+            code.setName(typing.getGeneFamily());
             identifier.setValue(sample.getSampleId());
             identifier.setSystem(sample.getCenterCode());
+            observation.setCode(code);
+            observation.setIdentifier(identifier);
+            observation.setGlstrings(mapper.map(typing, Glstrings.class));
+            observation.setHaploids(mapper.map(typing, Haploids.class));
+            observation.setSbtNgss(mapper.map(typing, SbtNgss.class));
+            observation.setSequences(mapper.map(typing, Sequences.class));
+            observation.setGeneticsPhaseSet(mapper.map(typing, GeneticsPhaseSet.class));
+            observation.setGenotypingResultsMethod(mapper.map(typing, GenotypingResultsMethod.class));
+            observation.setGenotypingResultsHaploids(mapper.map(typing, GenotypingResultsHaploids.class));
 
-            for (Typing typing : typings) {
-                Observation observation = new Observation();
-                Code code = new Code();
-
-                code.setName(typing.getGeneFamily());
-                observation.setCode(code);
-                observation.setSpecimen(specimen);
-                observation.setIdentifier(identifier);
-                observationList.add(observation);
-            }
+            observationList.add(observation);
         }
 
         observations.setObservations(observationList.stream()
@@ -87,7 +83,15 @@ public class ObservationMap implements Converter<Hml, Observations> {
 
     private ModelMapper createMapper() {
         ModelMapper mapper = new ModelMapper();
-        mapper.addConverter(new SpecimenMap());
+
+        mapper.addConverter(new GlStringMap());
+        mapper.addConverter(new HaploidMap());
+        mapper.addConverter(new SbtNgsMap());
+        mapper.addConverter(new SequenceMap());
+        mapper.addConverter(new GeneticsPhaseSetMap());
+        mapper.addConverter(new GenotypingResultsMethodMap());
+        mapper.addConverter(new GenotypingResultsHaploidMap());
+
         return mapper;
     }
 }

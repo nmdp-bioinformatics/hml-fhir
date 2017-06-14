@@ -48,22 +48,22 @@ public class HaploidMap implements Converter<FhirMessage, Samples> {
         Samples samples = new Samples();
         List<Sample> sampleList = new ArrayList<>();
         FhirMessage fhir = context.getSource();
-        Haploids haploids = fhir.getHaploids();
-
-        for (Haploid haploid : haploids.getHaploids()) {
-            org.nmdp.hmlfhirconvertermodels.dto.Haploid nmdpHaploid = new org.nmdp.hmlfhirconvertermodels.dto.Haploid();
-            AlleleAssignment alleleAssignment = new AlleleAssignment();
-            Typing typing = new Typing();
-            Sample sample = new Sample();
-
-            nmdpHaploid.setType(haploid.getHaploidType());
-            nmdpHaploid.setMethod(haploid.getMethod());
-            nmdpHaploid.setLocus(haploid.getLocus());
-            alleleAssignment.setHaploid(Arrays.asList(nmdpHaploid));
-            typing.setAlleleAssignment(Arrays.asList(alleleAssignment));
-            sample.setTyping(Arrays.asList(typing));
-            sampleList.add(sample);
-        }
+//        Haploids haploids = fhir.getHaploids();
+//
+//        for (Haploid haploid : haploids.getHaploids()) {
+//            org.nmdp.hmlfhirconvertermodels.dto.Haploid nmdpHaploid = new org.nmdp.hmlfhirconvertermodels.dto.Haploid();
+//            AlleleAssignment alleleAssignment = new AlleleAssignment();
+//            Typing typing = new Typing();
+//            Sample sample = new Sample();
+//
+//            nmdpHaploid.setType(haploid.getHaploidType());
+//            nmdpHaploid.setMethod(haploid.getMethod());
+//            nmdpHaploid.setLocus(haploid.getLocus());
+//            alleleAssignment.setHaploid(Arrays.asList(nmdpHaploid));
+//            typing.setAlleleAssignment(Arrays.asList(alleleAssignment));
+//            sample.setTyping(Arrays.asList(typing));
+//            sampleList.add(sample);
+//        }
 
         samples.setSamples(sampleList);
 

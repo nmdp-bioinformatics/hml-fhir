@@ -25,27 +25,55 @@ package org.nmdp.hmlfhir.mapping.fhir;
  */
 
 import org.modelmapper.Converter;
+import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.MappingContext;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.DiagnosticReport;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Identifier;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Patient;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Patients;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Specimens;
 import org.nmdp.hmlfhirconvertermodels.dto.Hml;
+import org.nmdp.hmlfhirconvertermodels.dto.Sample;
 
-public class PatientMap implements Converter<Hml, Patient> {
+import java.util.ArrayList;
+import java.util.List;
+
+public class PatientMap implements Converter<Hml, Patients> {
 
     @Override
-    public Patient convert(MappingContext<Hml, Patient> context) {
+    public Patients convert(MappingContext<Hml, Patients> context) {
         if (context.getSource() == null) {
             return null;
         }
 
-        Patient patient = new Patient();
+        Patients patients = new Patients();
+        List<Patient> patientList = new ArrayList<>();
         Hml hml = context.getSource();
-        Identifier identifier = new Identifier();
+        ModelMapper mapper = createMapper();
 
-        identifier.setValue(hml.getHmlId().getRootName());
-        identifier.setSystem(hml.getHmlId().getExtension());
-        patient.setIdentifier(identifier);
+        for (Sample sample : hml.getSamples()) {
+            Patient patient = new Patient();
+            Identifier identifier = new Identifier();
 
-        return patient;
+            identifier.setValue(hml.getHmlId().getRootName() + "_" + hml.getHmlId().getExtension());
+            identifier.setSystem(sample.getSampleId());
+            patient.setIdentifier(identifier);
+            patient.setSpecimens(mapper.map(sample, Specimens.class));
+            patient.setDiagnosticReport(mapper.map(hml, DiagnosticReport.class));
+            patientList.add(patient);
+        }
+
+        patients.setPatients(patientList);
+
+        return patients;
+    }
+
+    private ModelMapper createMapper() {
+        ModelMapper mapper = new ModelMapper();
+
+        mapper.addConverter(new SpecimenMap());
+        mapper.addConverter(new DiagnosticReportMap());
+
+        return mapper;
     }
 }

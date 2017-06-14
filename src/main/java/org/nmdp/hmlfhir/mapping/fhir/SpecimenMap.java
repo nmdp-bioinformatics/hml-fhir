@@ -25,31 +25,36 @@ package org.nmdp.hmlfhir.mapping.fhir;
  */
 
 import org.modelmapper.Converter;
+import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.MappingContext;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Collection;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Identifier;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Specimen;
+import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Observations;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Specimens;
 import org.nmdp.hmlfhirconvertermodels.dto.Hml;
 import org.nmdp.hmlfhirconvertermodels.dto.Sample;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class SpecimenMap implements Converter<Sample, Specimen> {
+public class SpecimenMap implements Converter<Sample, Specimens> {
 
     @Override
-    public Specimen convert(MappingContext<Sample, Specimen> context) {
+    public Specimens convert(MappingContext<Sample, Specimens> context) {
         if (context.getSource() == null) {
             return null;
         }
 
         Sample sample = context.getSource();
         Specimen specimen = new Specimen();
+        Specimens specimens = new Specimens();
         Identifier identifier = new Identifier();
         Collection collection = new Collection();
+        ModelMapper mapper = createMapper();
 
         if (sample.getCollectionMethods().size() > 0) {
             collection.setMethod(sample.getCollectionMethods().get(0).getName());
@@ -58,8 +63,17 @@ public class SpecimenMap implements Converter<Sample, Specimen> {
         identifier.setValue(sample.getSampleId());
         identifier.setSystem(sample.getCenterCode());
         specimen.setIdentifier(identifier);
+        specimen.setObservations(mapper.map(sample, Observations.class));
+        specimens.setSpecimens(Arrays.asList(specimen));
 
+        return specimens;
+    }
 
-        return specimen;
+    private ModelMapper createMapper() {
+        ModelMapper mapper = new ModelMapper();
+
+        mapper.addConverter(new ObservationMap());
+
+        return mapper;
     }
 }

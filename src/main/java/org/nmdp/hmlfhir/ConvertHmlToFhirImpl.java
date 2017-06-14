@@ -237,21 +237,8 @@ public class ConvertHmlToFhirImpl extends Convert implements ConvertHmlToFhir {
         ModelMapper mapper = createMapper();
         FhirMessage message = new FhirMessage();
 
-        message.setAlleleDatabases(mapper.map(hml, AlleleDatabases.class));
-        message.setAlleleNames(mapper.map(hml, AlleleNames.class));
-        message.setDiagnosticReport(mapper.map(hml, DiagnosticReport.class));
-        message.setGeneticsPhaseSets(mapper.map(hml, GeneticsPhaseSets.class));
-        message.setGenotypingResultsHaploids(mapper.map(hml, GenotypingResultsHaploids.class));
-        message.setGenotypingResultsMethods(mapper.map(hml, GenotypingResultsMethods.class));
-        message.setGlstrings(mapper.map(hml, Glstrings.class));
-        message.setHaploids(mapper.map(hml, Haploids.class));
-        message.setObservations(mapper.map(hml, Observations.class));
         message.setOrganization(mapper.map(hml, Organization.class));
-        message.setPatient(mapper.map(hml, Patient.class));
-        message.setSbtNgss(mapper.map(hml, SbtNgss.class));
-        message.setSequences(mapper.map(hml, Sequences.class));
-        message.setSsos(mapper.map(hml, Ssos.class));
-        message.setSsps(mapper.map(hml, Ssps.class));
+        message.setPatients(mapper.map(hml, Patients.class));
 
         return message;
     }
@@ -259,21 +246,8 @@ public class ConvertHmlToFhirImpl extends Convert implements ConvertHmlToFhir {
     private ModelMapper createMapper() {
         ModelMapper mapper = new ModelMapper();
 
-        mapper.addConverter(new AlleleDatabaseMap());
-        mapper.addConverter(new AlleleNameMap());
-        mapper.addConverter(new DiagnosticReportMap());
-        mapper.addConverter(new GeneticsPhaseSetMap());
-        mapper.addConverter(new GenotypingResultsHaploidMap());
-        mapper.addConverter(new GenotypingResultsMethodMap());
-        mapper.addConverter(new GlStringMap());
-        mapper.addConverter(new HaploidMap());
-        mapper.addConverter(new ObservationMap());
         mapper.addConverter(new OrganizationMap());
         mapper.addConverter(new PatientMap());
-        mapper.addConverter(new SbtNgsMap());
-        mapper.addConverter(new SequenceMap());
-        mapper.addConverter(new SsoMap());
-        mapper.addConverter(new SspMap());
 
         return  mapper;
     }

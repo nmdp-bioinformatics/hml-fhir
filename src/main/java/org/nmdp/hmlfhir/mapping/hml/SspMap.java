@@ -44,13 +44,12 @@ public class SspMap implements Converter<FhirMessage, Ssps> {
         Ssps ssps = new Ssps();
         List<Ssp> sspList = new ArrayList<>();
         FhirMessage fhir = context.getSource();
-        org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Ssps fhirSsps = fhir.getSsps();
 
-        for (org.nmdp.hmlfhirconvertermodels.domain.fhir.Ssp fhirSsp : fhirSsps.getSsps()) {
-            Ssp ssp = new Ssp();
-            ssp.setLocus(fhirSsp.getLocus());
-            sspList.add(ssp);
-        }
+//        for (org.nmdp.hmlfhirconvertermodels.domain.fhir.Ssp fhirSsp : fhirSsps.getSsps()) {
+//            Ssp ssp = new Ssp();
+//            ssp.setLocus(fhirSsp.getLocus());
+//            sspList.add(ssp);
+//        }
 
         ssps.setSsps(sspList);
 

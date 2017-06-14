@@ -43,13 +43,13 @@ public class PatientMap implements Converter<FhirMessage, Hml> {
 
         Hml hml = new Hml();
         FhirMessage fhir = context.getSource();
-        Patient patient = fhir.getPatient();
-        HmlId hmlId = new HmlId();
-        Identifier identifier = patient.getIdentifier();
+//        Patient patient = fhir.getPatient();
+//        HmlId hmlId = new HmlId();
+//        Identifier identifier = patient.getIdentifier();
 
-        hmlId.setExtension(identifier.getSystem());
-        hmlId.setRootName(identifier.getValue());
-        hml.setHmlId(hmlId);
+//        hmlId.setExtension(identifier.getSystem());
+//        hmlId.setRootName(identifier.getValue());
+//        hml.setHmlId(hmlId);
 
         return hml;
     }

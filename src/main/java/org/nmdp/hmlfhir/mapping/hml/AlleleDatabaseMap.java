@@ -48,20 +48,20 @@ public class AlleleDatabaseMap implements Converter<FhirMessage, Samples> {
 
         Samples samples = new Samples();
         List<Sample> sampleList = new ArrayList<>();
-        FhirMessage fhir = context.getSource();
-        AlleleDatabases alleleDatabases = fhir.getAlleleDatabases();
-
-        for (AlleleDatabase alleleDatabase : alleleDatabases.getAlleleDatabases()) {
-            AlleleAssignment alleleAssignment = new AlleleAssignment();
-            Typing typing = new Typing();
-            Sample sample = new Sample();
-
-            alleleAssignment.setAlleleVersion(alleleDatabase.getVersion());
-            alleleAssignment.setAlleleDb(alleleDatabase.getName());
-            typing.setAlleleAssignment(Arrays.asList(alleleAssignment));
-            sample.setTyping(Arrays.asList(typing));
-            sampleList.add(sample);
-        }
+//        FhirMessage fhir = context.getSource();
+//        AlleleDatabases alleleDatabases = fhir.getAlleleDatabases();
+//
+//        for (AlleleDatabase alleleDatabase : alleleDatabases.getAlleleDatabases()) {
+//            AlleleAssignment alleleAssignment = new AlleleAssignment();
+//            Typing typing = new Typing();
+//            Sample sample = new Sample();
+//
+//            alleleAssignment.setAlleleVersion(alleleDatabase.getVersion());
+//            alleleAssignment.setAlleleDb(alleleDatabase.getName());
+//            typing.setAlleleAssignment(Arrays.asList(alleleAssignment));
+//            sample.setTyping(Arrays.asList(typing));
+//            sampleList.add(sample);
+//        }
 
         samples.setSamples(sampleList);
 

@@ -37,44 +37,22 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class GenotypingResultsMethodMap implements Converter<Hml, GenotypingResultsMethods> {
+public class GenotypingResultsMethodMap implements Converter<Typing, GenotypingResultsMethod> {
 
     @Override
-    public GenotypingResultsMethods convert(MappingContext<Hml, GenotypingResultsMethods> context) {
+    public GenotypingResultsMethod convert(MappingContext<Typing, GenotypingResultsMethod> context) {
         if (context.getSource() == null) {
             return null;
         }
 
-        GenotypingResultsMethods genotypingResultsMethods = new GenotypingResultsMethods();
-        List<GenotypingResultsMethod> genotypingResultsMethodList = new ArrayList<>();
-        Hml hml = context.getSource();
+        Typing typing = context.getSource();
+        GenotypingResultsMethod genotypingResultsMethod = new GenotypingResultsMethod();
+        TypingMethod typingMethod = typing.getTypingMethod();
+        SbtNgs sbtNgs = typingMethod.getSbtNgs().stream().findFirst().get();
 
-        for (Sample sample : hml.getSamples()) {
-            List<Typing> typings = sample.getTyping();
+        genotypingResultsMethod.setTestId(sbtNgs.getTestId());
+        genotypingResultsMethod.setTestIdSource(sbtNgs.getTestIdSource());
 
-            for (Typing typing : typings) {
-                GenotypingResultsMethod genotypingResultsMethod = new GenotypingResultsMethod();
-                TypingMethod typingMethod = typing.getTypingMethod();
-
-                for (SbtNgs sbtNgs : typingMethod.getSbtNgs()) {
-                    genotypingResultsMethod.setIdentifier(sample.getSampleId());
-                    genotypingResultsMethod.setTestId(sbtNgs.getTestId());
-                    genotypingResultsMethod.setTestIdSource(sbtNgs.getTestIdSource());
-                    genotypingResultsMethodList.add(genotypingResultsMethod);
-                }
-            }
-        }
-
-        final List<GenotypingResultsMethod> distinctGenotypingResultsMethodList =
-                Distinct.distinctByKeys(genotypingResultsMethodList,
-                        GenotypingResultsMethod::getTestId,
-                        GenotypingResultsMethod::getTestIdSource);
-
-        genotypingResultsMethods.setGenotypingResultsMethods(distinctGenotypingResultsMethodList.stream()
-            .filter(Objects::nonNull)
-            .filter(genotypingResultsMethod -> genotypingResultsMethod.hasValue())
-            .collect(Collectors.toList()));
-
-        return genotypingResultsMethods;
+        return genotypingResultsMethod;
     }
 }

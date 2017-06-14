@@ -48,14 +48,14 @@ public class SbtNgsMap implements Converter<FhirMessage, SbtNgss> {
         SbtNgss sbtNgss = new SbtNgss();
         List<SbtNgs> sbtNgsList = new ArrayList<>();
         FhirMessage fhir = context.getSource();
-        org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.SbtNgss fhirSbtNgss = fhir.getSbtNgss();
-
-        for (org.nmdp.hmlfhirconvertermodels.domain.fhir.SbtNgs sbtNgs : fhirSbtNgss.getSbtNgss()) {
-            SbtNgs hmlSbtNgs = new SbtNgs();
-
-            hmlSbtNgs.setLocus(sbtNgs.getLocus());
-            sbtNgsList.add(hmlSbtNgs);
-        }
+//        org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.SbtNgss fhirSbtNgss = fhir.getSbtNgss();
+//
+//        for (org.nmdp.hmlfhirconvertermodels.domain.fhir.SbtNgs sbtNgs : fhirSbtNgss.getSbtNgss()) {
+//            SbtNgs hmlSbtNgs = new SbtNgs();
+//
+//            hmlSbtNgs.setLocus(sbtNgs.getLocus());
+//            sbtNgsList.add(hmlSbtNgs);
+//        }
 
         sbtNgss.setSbtNgss(sbtNgsList);
 

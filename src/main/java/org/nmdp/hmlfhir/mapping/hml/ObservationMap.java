@@ -53,19 +53,19 @@ public class ObservationMap implements Converter<FhirMessage, Samples> {
         Samples samples = new Samples();
         List<Sample> sampleList = new ArrayList<>();
         FhirMessage fhir = context.getSource();
-        Observations observations = fhir.getObservations();
-
-        for (Observation observation : observations.getObservations()) {
-            Typing typing = new Typing();
-            Sample sample = new Sample();
-            Code code = observation.getCode();
-
-            typing.setGeneFamily(code.getName());
-            sample.setTyping(Arrays.asList(typing));
-            sampleList.add(sample);
-        }
-
-        samples.setSamples(sampleList);
+//        Observations observations = fhir.getObservations();
+//
+//        for (Observation observation : observations.getObservations()) {
+//            Typing typing = new Typing();
+//            Sample sample = new Sample();
+//            Code code = observation.getCode();
+//
+//            typing.setGeneFamily(code.getName());
+//            sample.setTyping(Arrays.asList(typing));
+//            sampleList.add(sample);
+//        }
+//
+//        samples.setSamples(sampleList);
 
         return samples;
     }

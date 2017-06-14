@@ -50,23 +50,23 @@ public class GenotypingResultsHaploidMap implements Converter<FhirMessage, Sampl
         Samples samples = new Samples();
         List<Sample> sampleList = new ArrayList<>();
         FhirMessage fhir = context.getSource();
-        GenotypingResultsHaploids genotypingResultsHaploids = fhir.getGenotypingResultsHaploids();
-
-        for (GenotypingResultsHaploid genotypingResultsHaploid : genotypingResultsHaploids.getGenotypingResultsHaploids()) {
-            FhirDefinedType fhirDefinedType = genotypingResultsHaploid.getType();
-            Haploid haploid = new Haploid();
-            AlleleAssignment alleleAssignment = new AlleleAssignment();
-            Typing typing = new Typing();
-            Sample sample = new Sample();
-
-            haploid.setMethod(fhirDefinedType.getMethod());
-            haploid.setLocus(fhirDefinedType.getLocus());
-            haploid.setType(fhirDefinedType.getFhirType());
-            alleleAssignment.setHaploid(Arrays.asList(haploid));
-            typing.setAlleleAssignment(Arrays.asList(alleleAssignment));
-            sample.setTyping(Arrays.asList(typing));
-            sampleList.add(sample);
-        }
+//        GenotypingResultsHaploids genotypingResultsHaploids = fhir.getGenotypingResultsHaploids();
+//
+//        for (GenotypingResultsHaploid genotypingResultsHaploid : genotypingResultsHaploids.getGenotypingResultsHaploids()) {
+//            FhirDefinedType fhirDefinedType = genotypingResultsHaploid.getType();
+//            Haploid haploid = new Haploid();
+//            AlleleAssignment alleleAssignment = new AlleleAssignment();
+//            Typing typing = new Typing();
+//            Sample sample = new Sample();
+//
+//            haploid.setMethod(fhirDefinedType.getMethod());
+//            haploid.setLocus(fhirDefinedType.getLocus());
+//            haploid.setType(fhirDefinedType.getFhirType());
+//            alleleAssignment.setHaploid(Arrays.asList(haploid));
+//            typing.setAlleleAssignment(Arrays.asList(alleleAssignment));
+//            sample.setTyping(Arrays.asList(typing));
+//            sampleList.add(sample);
+//        }
 
         samples.setSamples(sampleList);
 

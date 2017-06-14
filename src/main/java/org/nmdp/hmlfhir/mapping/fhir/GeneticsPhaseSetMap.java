@@ -36,33 +36,22 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class GeneticsPhaseSetMap implements Converter<Hml, GeneticsPhaseSets> {
+public class GeneticsPhaseSetMap implements Converter<Typing, GeneticsPhaseSets> {
 
     @Override
-    public GeneticsPhaseSets convert(MappingContext<Hml, GeneticsPhaseSets> context) {
+    public GeneticsPhaseSets convert(MappingContext<Typing, GeneticsPhaseSets> context) {
         if (context.getSource() == null) {
             return null;
         }
 
         GeneticsPhaseSets geneticsPhaseSets = new GeneticsPhaseSets();
-        Hml hml = context.getSource();
+        Typing typing = context.getSource();
         List<GeneticsPhaseSet> geneticsPhaseSetList = new ArrayList<>();
+        ConsensusSequence consensusSequence = typing.getConsensusSequence();
+        List<ConsensusSequenceBlock> consensusSequenceBlocks = consensusSequence.getConsensusSequenceBlocks();
 
-        for (Sample sample : hml.getSamples()) {
-            List<Typing> typings = sample.getTyping();
-            Identifier identifier = new Identifier();
-
-            identifier.setValue(sample.getSampleId());
-            identifier.setSystem(sample.getCenterCode());
-
-            for (Typing typing : typings) {
-                ConsensusSequence consensusSequence = typing.getConsensusSequence();
-                List<ConsensusSequenceBlock> consensusSequenceBlocks = consensusSequence.getConsensusSequenceBlocks();
-
-                consensusSequenceBlocks.stream()
-                        .forEach(c -> geneticsPhaseSetList.add(convertConsensusSequenceBlockToGeneticsPhaseSet(c, identifier)));
-            }
-        }
+        consensusSequenceBlocks.stream()
+                .forEach(c -> geneticsPhaseSetList.add(convertConsensusSequenceBlockToGeneticsPhaseSet(c)));
 
         geneticsPhaseSets.setGeneticsPhaseSets(geneticsPhaseSetList.stream()
             .filter(Objects::nonNull)
@@ -72,12 +61,11 @@ public class GeneticsPhaseSetMap implements Converter<Hml, GeneticsPhaseSets> {
         return geneticsPhaseSets;
     }
 
-    private GeneticsPhaseSet convertConsensusSequenceBlockToGeneticsPhaseSet(ConsensusSequenceBlock consensusSequenceBlock, Identifier identifier) {
+    private GeneticsPhaseSet convertConsensusSequenceBlockToGeneticsPhaseSet(ConsensusSequenceBlock consensusSequenceBlock) {
         GeneticsPhaseSet geneticsPhaseSet = new GeneticsPhaseSet();
 
         geneticsPhaseSet.setPhasingGroup(consensusSequenceBlock.getPhasingGroup());
         geneticsPhaseSet.setPhaseSet(consensusSequenceBlock.getPhaseSet());
-        geneticsPhaseSet.setIdentifier(identifier);
 
         return geneticsPhaseSet;
     }

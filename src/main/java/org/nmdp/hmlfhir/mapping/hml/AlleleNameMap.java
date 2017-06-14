@@ -47,27 +47,27 @@ public class AlleleNameMap implements Converter<FhirMessage, Samples> {
         Samples samples = new Samples();
         List<Sample> sampleList = new ArrayList<>();
         FhirMessage fhir = context.getSource();
-        AlleleNames alleleNames = fhir.getAlleleNames();
-
-        for (AlleleName alleleName : alleleNames.getAlleleNames()) {
-            Allele allele = new Allele();
-            LocusBlock locusBlock = new LocusBlock();
-            DiploidCombination diploidCombination = new DiploidCombination();
-            Genotype genotype = new Genotype();
-            AlleleAssignment alleleAssignment = new AlleleAssignment();
-            Typing typing = new Typing();
-            Sample sample = new Sample();
-
-            allele.setName(alleleName.getName());
-            locusBlock.setAlleles(Arrays.asList(allele));
-            diploidCombination.setLocusBlock(locusBlock);
-            genotype.setDiploidCombinations(Arrays.asList(diploidCombination));
-            alleleAssignment.setGenotypes(Arrays.asList(genotype));
-            typing.setAlleleAssignment(Arrays.asList(alleleAssignment));
-            sample.setTyping(Arrays.asList(typing));
-
-            sampleList.add(sample);
-        }
+//        AlleleNames alleleNames = fhir.getAlleleNames();
+//
+//        for (AlleleName alleleName : alleleNames.getAlleleNames()) {
+//            Allele allele = new Allele();
+//            LocusBlock locusBlock = new LocusBlock();
+//            DiploidCombination diploidCombination = new DiploidCombination();
+//            Genotype genotype = new Genotype();
+//            AlleleAssignment alleleAssignment = new AlleleAssignment();
+//            Typing typing = new Typing();
+//            Sample sample = new Sample();
+//
+//            allele.setName(alleleName.getName());
+//            locusBlock.setAlleles(Arrays.asList(allele));
+//            diploidCombination.setLocusBlock(locusBlock);
+//            genotype.setDiploidCombinations(Arrays.asList(diploidCombination));
+//            alleleAssignment.setGenotypes(Arrays.asList(genotype));
+//            typing.setAlleleAssignment(Arrays.asList(alleleAssignment));
+//            sample.setTyping(Arrays.asList(typing));
+//
+//            sampleList.add(sample);
+//        }
 
 
         samples.setSamples(sampleList);

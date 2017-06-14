@@ -48,11 +48,11 @@ public class SequenceMap implements Converter<FhirMessage, Samples> {
         Samples samples = new Samples();
         List<Sample> sampleList = new ArrayList<>();
         FhirMessage fhir = context.getSource();
-        Sequences sequences = fhir.getSequences();
-
-        for (Sequence sequence : sequences.getSequences()) {
-            sampleList.addAll(createConsensusSequences(sequence));
-        }
+//        Sequences sequences = fhir.getSequences();
+//
+//        for (Sequence sequence : sequences.getSequences()) {
+//            sampleList.addAll(createConsensusSequences(sequence));
+//        }
 
         samples.setSamples(sampleList);
 

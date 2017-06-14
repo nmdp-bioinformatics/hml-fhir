@@ -42,11 +42,11 @@ public class DiagnosticReportMap implements Converter<FhirMessage, HmlId> {
 
         HmlId hmlId = new HmlId();
         FhirMessage fhir = context.getSource();
-        DiagnosticReport diagnosticReport = fhir.getDiagnosticReport();
-        Identifier identifier = diagnosticReport.getIdentifier();
+//        DiagnosticReport diagnosticReport = fhir.getDiagnosticReport();
+//        Identifier identifier = diagnosticReport.getIdentifier();
 
-        hmlId.setRootName(identifier.getValue());
-        hmlId.setExtension(identifier.getSystem());
+//        hmlId.setRootName(identifier.getValue());
+//        hmlId.setExtension(identifier.getSystem());
 
         return hmlId;
     }
