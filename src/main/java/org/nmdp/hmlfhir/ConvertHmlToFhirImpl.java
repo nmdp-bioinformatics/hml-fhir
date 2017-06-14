@@ -236,9 +236,11 @@ public class ConvertHmlToFhirImpl extends Convert implements ConvertHmlToFhir {
     private FhirMessage toFhir(org.nmdp.hmlfhirconvertermodels.dto.Hml hml) {
         ModelMapper mapper = createMapper();
         FhirMessage message = new FhirMessage();
+        Organization organization = mapper.map(hml, Organization.class);
+        Patients patients = mapper.map(hml, Patients.class);
 
-        message.setOrganization(mapper.map(hml, Organization.class));
-        message.setPatients(mapper.map(hml, Patients.class));
+        message.setOrganization(organization);
+        message.setPatients(patients);
 
         return message;
     }
