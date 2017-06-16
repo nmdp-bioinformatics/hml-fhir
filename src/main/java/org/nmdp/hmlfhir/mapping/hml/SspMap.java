@@ -27,7 +27,7 @@ package org.nmdp.hmlfhir.mapping.hml;
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage;
-import org.nmdp.hmlfhirconvertermodels.dto.*;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.*;
 import org.nmdp.hmlfhirconvertermodels.lists.Ssps;
 
 import java.util.ArrayList;

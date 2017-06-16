@@ -29,10 +29,10 @@ import org.modelmapper.spi.MappingContext;
 import org.nmdp.hmlfhir.mapping.Distinct;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.AlleleDatabase;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.AlleleDatabases;
-import org.nmdp.hmlfhirconvertermodels.dto.AlleleAssignment;
-import org.nmdp.hmlfhirconvertermodels.dto.Hml;
-import org.nmdp.hmlfhirconvertermodels.dto.Sample;
-import org.nmdp.hmlfhirconvertermodels.dto.Typing;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.AlleleAssignment;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Hml;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Sample;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Typing;
 
 import java.util.ArrayList;
 import java.util.List;

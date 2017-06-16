@@ -32,8 +32,8 @@ import org.nmdp.hmlfhirconvertermodels.domain.fhir.Identifier;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Specimen;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Observations;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Specimens;
-import org.nmdp.hmlfhirconvertermodels.dto.Hml;
-import org.nmdp.hmlfhirconvertermodels.dto.Sample;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Hml;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Sample;
 
 import java.util.Arrays;
 import java.util.List;

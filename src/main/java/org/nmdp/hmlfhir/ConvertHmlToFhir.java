@@ -28,21 +28,21 @@ import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
-import org.nmdp.hmlfhirconvertermodels.domain.Hml;
+import org.nmdp.hmlfhirconvertermodels.domain.hml.Hml;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage;
 
 public interface ConvertHmlToFhir {
     FhirMessage convert(Hml hml) throws Exception;
-    FhirMessage convert(org.nmdp.hmlfhirconvertermodels.dto.Hml hml) throws Exception;
+    FhirMessage convert(org.nmdp.hmlfhirconvertermodels.dto.hml.Hml hml) throws Exception;
     FhirMessage convert(JsonObject hml) throws Exception;
     FhirMessage convert(JSONObject hml, String prefix) throws Exception;
     FhirMessage convert(String hml, String prefix) throws Exception;
-    Hml convertToDo(org.nmdp.hmlfhirconvertermodels.dto.Hml hml) throws Exception;
+    Hml convertToDo(org.nmdp.hmlfhirconvertermodels.dto.hml.Hml hml) throws Exception;
     Hml convertToDo(JsonObject hml) throws Exception;
     Hml convertToDo(JSONObject hml, String prefix) throws Exception;
     Hml convertToDo(String hml, String prefix) throws Exception;
-    org.nmdp.hmlfhirconvertermodels.dto.Hml convertToDto(Hml hml) throws Exception;
-    org.nmdp.hmlfhirconvertermodels.dto.Hml convertToDto(JsonObject hml) throws Exception;
-    org.nmdp.hmlfhirconvertermodels.dto.Hml convertToDto(JSONObject hml, String prefix) throws Exception;
-    org.nmdp.hmlfhirconvertermodels.dto.Hml convertToDto(String hml, String prefix) throws Exception;
+    org.nmdp.hmlfhirconvertermodels.dto.hml.Hml convertToDto(Hml hml) throws Exception;
+    org.nmdp.hmlfhirconvertermodels.dto.hml.Hml convertToDto(JsonObject hml) throws Exception;
+    org.nmdp.hmlfhirconvertermodels.dto.hml.Hml convertToDto(JSONObject hml, String prefix) throws Exception;
+    org.nmdp.hmlfhirconvertermodels.dto.hml.Hml convertToDto(String hml, String prefix) throws Exception;
 }

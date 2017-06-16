@@ -25,7 +25,7 @@ package org.nmdp.hmlfhir.mapping.object;
  */
 
 import org.nmdp.hmlfhirconvertermodels.HmlMessage;
-import org.nmdp.hmlfhirconvertermodels.dto.*;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.*;
 
 import java.util.Arrays;
 import java.util.ArrayList;

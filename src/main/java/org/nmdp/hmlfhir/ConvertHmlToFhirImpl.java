@@ -32,7 +32,7 @@ import org.modelmapper.ModelMapper;
 
 import org.nmdp.hmlfhir.deserialization.Deserializer;
 import org.nmdp.hmlfhir.mapping.fhir.*;
-import org.nmdp.hmlfhirconvertermodels.domain.Hml;
+import org.nmdp.hmlfhirconvertermodels.domain.hml.Hml;
 import org.nmdp.hmlfhirconvertermodels.domain.base.SwaggerConverter;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.*;
 
@@ -60,7 +60,7 @@ public class ConvertHmlToFhirImpl extends Convert implements ConvertHmlToFhir {
     }
 
     @Override
-    public FhirMessage convert(org.nmdp.hmlfhirconvertermodels.dto.Hml hml) throws Exception {
+    public FhirMessage convert(org.nmdp.hmlfhirconvertermodels.dto.hml.Hml hml) throws Exception {
         try {
             return toFhir(hml);
         } catch (Exception ex) {
@@ -72,7 +72,7 @@ public class ConvertHmlToFhirImpl extends Convert implements ConvertHmlToFhir {
     @Override
     public FhirMessage convert(JsonObject hml) throws Exception {
         try {
-            org.nmdp.hmlfhirconvertermodels.dto.Hml javaHml = convertToDto(hml);
+            org.nmdp.hmlfhirconvertermodels.dto.hml.Hml javaHml = convertToDto(hml);
             return toFhir(javaHml);
         } catch (Exception ex) {
             LOG.error(ex);
@@ -83,7 +83,7 @@ public class ConvertHmlToFhirImpl extends Convert implements ConvertHmlToFhir {
     @Override
     public FhirMessage convert(JSONObject hml, String prefix) throws Exception {
         try {
-            org.nmdp.hmlfhirconvertermodels.dto.Hml javaHml = convertToDto(hml, prefix);
+            org.nmdp.hmlfhirconvertermodels.dto.hml.Hml javaHml = convertToDto(hml, prefix);
             return toFhir(javaHml);
         } catch (Exception ex) {
             LOG.error(ex);
@@ -94,7 +94,7 @@ public class ConvertHmlToFhirImpl extends Convert implements ConvertHmlToFhir {
     @Override
     public FhirMessage convert(String hml, String prefix) throws Exception {
         try {
-            org.nmdp.hmlfhirconvertermodels.dto.Hml javaHml = convertToDto(hml, prefix);
+            org.nmdp.hmlfhirconvertermodels.dto.hml.Hml javaHml = convertToDto(hml, prefix);
             return toFhir(javaHml);
         } catch (Exception ex) {
             LOG.error(ex);
@@ -103,7 +103,7 @@ public class ConvertHmlToFhirImpl extends Convert implements ConvertHmlToFhir {
     }
 
     @Override
-    public Hml convertToDo(org.nmdp.hmlfhirconvertermodels.dto.Hml hml) throws Exception {
+    public Hml convertToDo(org.nmdp.hmlfhirconvertermodels.dto.hml.Hml hml) throws Exception {
         try {
             return toDomain(hml);
         } catch (Exception ex) {
@@ -116,8 +116,8 @@ public class ConvertHmlToFhirImpl extends Convert implements ConvertHmlToFhir {
     public Hml convertToDo(JsonObject hml) throws Exception {
         try {
             Gson gson = getGsonConverter();
-            org.nmdp.hmlfhirconvertermodels.dto.Hml javaHml =
-                    gson.fromJson(hml, org.nmdp.hmlfhirconvertermodels.dto.Hml.class);
+            org.nmdp.hmlfhirconvertermodels.dto.hml.Hml javaHml =
+                    gson.fromJson(hml, org.nmdp.hmlfhirconvertermodels.dto.hml.Hml.class);
 
             return toDomain(javaHml);
         } catch (Exception ex) {
@@ -138,8 +138,8 @@ public class ConvertHmlToFhirImpl extends Convert implements ConvertHmlToFhir {
 
             Object obj = parser.parse(hml.toString());
             JsonObject json = (JsonObject) obj;
-            org.nmdp.hmlfhirconvertermodels.dto.Hml javaHml =
-                    gson.fromJson(json, org.nmdp.hmlfhirconvertermodels.dto.Hml.class);
+            org.nmdp.hmlfhirconvertermodels.dto.hml.Hml javaHml =
+                    gson.fromJson(json, org.nmdp.hmlfhirconvertermodels.dto.hml.Hml.class);
 
             return toDomain(javaHml);
         } catch (Exception ex) {
@@ -161,8 +161,8 @@ public class ConvertHmlToFhirImpl extends Convert implements ConvertHmlToFhir {
 
             Object obj = parser.parse(jsonObj.toString());
             JsonObject json = (JsonObject) obj;
-            org.nmdp.hmlfhirconvertermodels.dto.Hml javaHml =
-                    gson.fromJson(json, org.nmdp.hmlfhirconvertermodels.dto.Hml.class);
+            org.nmdp.hmlfhirconvertermodels.dto.hml.Hml javaHml =
+                    gson.fromJson(json, org.nmdp.hmlfhirconvertermodels.dto.hml.Hml.class);
 
             return toDomain(javaHml);
         } catch (Exception ex) {
@@ -172,7 +172,7 @@ public class ConvertHmlToFhirImpl extends Convert implements ConvertHmlToFhir {
     }
 
     @Override
-    public org.nmdp.hmlfhirconvertermodels.dto.Hml convertToDto(Hml hml) throws Exception {
+    public org.nmdp.hmlfhirconvertermodels.dto.hml.Hml convertToDto(Hml hml) throws Exception {
         try {
             return toDto(hml);
         } catch (Exception ex) {
@@ -182,10 +182,10 @@ public class ConvertHmlToFhirImpl extends Convert implements ConvertHmlToFhir {
     }
 
     @Override
-    public org.nmdp.hmlfhirconvertermodels.dto.Hml convertToDto(JsonObject hml) throws Exception {
+    public org.nmdp.hmlfhirconvertermodels.dto.hml.Hml convertToDto(JsonObject hml) throws Exception {
         try {
             Gson gson = getGsonConverter();
-            return gson.fromJson(hml, org.nmdp.hmlfhirconvertermodels.dto.Hml.class);
+            return gson.fromJson(hml, org.nmdp.hmlfhirconvertermodels.dto.hml.Hml.class);
         } catch (Exception ex) {
             LOG.error(ex);
             throw (Exception) ex;
@@ -193,7 +193,7 @@ public class ConvertHmlToFhirImpl extends Convert implements ConvertHmlToFhir {
     }
 
     @Override
-    public org.nmdp.hmlfhirconvertermodels.dto.Hml convertToDto(JSONObject hml, String prefix) throws Exception {
+    public org.nmdp.hmlfhirconvertermodels.dto.hml.Hml convertToDto(JSONObject hml, String prefix) throws Exception {
         try {
             JsonParser parser = new JsonParser();
             Gson gson = getGsonConverter();
@@ -205,7 +205,7 @@ public class ConvertHmlToFhirImpl extends Convert implements ConvertHmlToFhir {
             Object obj = parser.parse(hml.toString());
             JsonObject json = (JsonObject) obj;
 
-            return gson.fromJson(json, org.nmdp.hmlfhirconvertermodels.dto.Hml.class);
+            return gson.fromJson(json, org.nmdp.hmlfhirconvertermodels.dto.hml.Hml.class);
         } catch (Exception ex) {
             LOG.error(ex);
             throw (Exception) ex;
@@ -213,7 +213,7 @@ public class ConvertHmlToFhirImpl extends Convert implements ConvertHmlToFhir {
     }
 
     @Override
-    public org.nmdp.hmlfhirconvertermodels.dto.Hml convertToDto(String hml, String prefix) throws Exception {
+    public org.nmdp.hmlfhirconvertermodels.dto.hml.Hml convertToDto(String hml, String prefix) throws Exception {
         try {
             JSONObject jsonObj = convertXmlStringToJson(hml);
             JsonParser parser = new JsonParser();
@@ -226,14 +226,14 @@ public class ConvertHmlToFhirImpl extends Convert implements ConvertHmlToFhir {
             Object obj = parser.parse(jsonObj.toString());
             JsonObject json = (JsonObject) obj;
 
-            return gson.fromJson(json, org.nmdp.hmlfhirconvertermodels.dto.Hml.class);
+            return gson.fromJson(json, org.nmdp.hmlfhirconvertermodels.dto.hml.Hml.class);
         } catch (Exception ex) {
             LOG.error(ex);
             throw (Exception) ex;
         }
     }
 
-    private FhirMessage toFhir(org.nmdp.hmlfhirconvertermodels.dto.Hml hml) {
+    private FhirMessage toFhir(org.nmdp.hmlfhirconvertermodels.dto.hml.Hml hml) {
         ModelMapper mapper = createMapper();
         FhirMessage message = new FhirMessage();
         Organization organization = mapper.map(hml, Organization.class);
@@ -255,23 +255,23 @@ public class ConvertHmlToFhirImpl extends Convert implements ConvertHmlToFhir {
     }
 
     private FhirMessage toFhir(Hml hml) {
-        org.nmdp.hmlfhirconvertermodels.dto.Hml dtoHml = toDto(hml);
+        org.nmdp.hmlfhirconvertermodels.dto.hml.Hml dtoHml = toDto(hml);
         return toFhir(dtoHml);
     }
 
-    private Hml toDomain(org.nmdp.hmlfhirconvertermodels.dto.Hml hml) {
-        SwaggerConverter<Hml, org.nmdp.hmlfhirconvertermodels.dto.Hml> converter =
-                new SwaggerConverter<>(Hml.class, org.nmdp.hmlfhirconvertermodels.dto.Hml.class);
+    private Hml toDomain(org.nmdp.hmlfhirconvertermodels.dto.hml.Hml hml) {
+        SwaggerConverter<Hml, org.nmdp.hmlfhirconvertermodels.dto.hml.Hml> converter =
+                new SwaggerConverter<>(Hml.class, org.nmdp.hmlfhirconvertermodels.dto.hml.Hml.class);
         return converter.convertFromSwagger(hml);
     }
 
-    private org.nmdp.hmlfhirconvertermodels.dto.Hml toDto(Hml hml) {
+    private org.nmdp.hmlfhirconvertermodels.dto.hml.Hml toDto(Hml hml) {
         return hml.toDto(hml);
     }
 
     private Gson getGsonConverter() {
         GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(org.nmdp.hmlfhirconvertermodels.dto.Hml.class, deserializer);
+        gsonBuilder.registerTypeAdapter(org.nmdp.hmlfhirconvertermodels.dto.hml.Hml.class, deserializer);
         return gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_DASHES).create();
     }
 }

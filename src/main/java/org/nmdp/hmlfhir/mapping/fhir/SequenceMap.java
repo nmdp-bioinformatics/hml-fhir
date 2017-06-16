@@ -30,8 +30,8 @@ import org.nmdp.hmlfhir.mapping.Distinct;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.*;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Sequence;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Sequences;
-import org.nmdp.hmlfhirconvertermodels.dto.*;
-import org.nmdp.hmlfhirconvertermodels.dto.Variant;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.*;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Variant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,8 +109,8 @@ public class SequenceMap implements Converter<Typing, Sequences> {
         }
 
         for (ConsensusSequenceBlock consensusSequenceBlock : consensusSequence.getConsensusSequenceBlocks()) {
-            org.nmdp.hmlfhirconvertermodels.dto.Sequence seq = consensusSequenceBlock.getSequence();
-            org.nmdp.hmlfhirconvertermodels.dto.Variant var = consensusSequenceBlock.getVariant();
+            org.nmdp.hmlfhirconvertermodels.dto.hml.Sequence seq = consensusSequenceBlock.getSequence();
+            org.nmdp.hmlfhirconvertermodels.dto.hml.Variant var = consensusSequenceBlock.getVariant();
             Sequence sequence = new Sequence();
             SequenceQuality sequenceQuality = consensusSequenceBlock.getSequenceQuality();
             org.nmdp.hmlfhirconvertermodels.domain.fhir.Variant variant = new org.nmdp.hmlfhirconvertermodels.domain.fhir.Variant();

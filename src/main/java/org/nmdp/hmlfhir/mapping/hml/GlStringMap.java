@@ -30,7 +30,7 @@ import org.nmdp.hmlfhir.mapping.Distinct;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Glstring;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Glstrings;
-import org.nmdp.hmlfhirconvertermodels.dto.*;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.*;
 import org.nmdp.hmlfhirconvertermodels.lists.GlStrings;
 import org.nmdp.hmlfhirconvertermodels.lists.Samples;
 

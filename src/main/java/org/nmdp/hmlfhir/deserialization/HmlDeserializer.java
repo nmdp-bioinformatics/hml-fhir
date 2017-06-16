@@ -25,7 +25,7 @@ package org.nmdp.hmlfhir.deserialization;
  */
 
 import com.google.gson.*;
-import org.nmdp.hmlfhirconvertermodels.dto.*;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.*;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

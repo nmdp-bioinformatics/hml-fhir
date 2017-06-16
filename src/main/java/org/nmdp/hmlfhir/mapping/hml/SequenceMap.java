@@ -29,8 +29,8 @@ import org.modelmapper.spi.MappingContext;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.*;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Sequence;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Sequences;
-import org.nmdp.hmlfhirconvertermodels.dto.*;
-import org.nmdp.hmlfhirconvertermodels.dto.Variant;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.*;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Variant;
 import org.nmdp.hmlfhirconvertermodels.lists.Samples;
 
 import java.util.ArrayList;

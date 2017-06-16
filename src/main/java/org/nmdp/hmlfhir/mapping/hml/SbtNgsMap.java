@@ -28,8 +28,8 @@ import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
 import org.nmdp.hmlfhir.mapping.Distinct;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.*;
-import org.nmdp.hmlfhirconvertermodels.dto.*;
-import org.nmdp.hmlfhirconvertermodels.dto.SbtNgs;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.*;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.SbtNgs;
 import org.nmdp.hmlfhirconvertermodels.lists.SbtNgss;
 
 import java.util.ArrayList;

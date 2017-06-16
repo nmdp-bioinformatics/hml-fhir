@@ -29,7 +29,7 @@ import org.modelmapper.spi.MappingContext;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirDefinedType;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.GenotypingResultsHaploid;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.GenotypingResultsHaploids;
-import org.nmdp.hmlfhirconvertermodels.dto.*;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.*;
 
 import java.util.ArrayList;
 import java.util.List;

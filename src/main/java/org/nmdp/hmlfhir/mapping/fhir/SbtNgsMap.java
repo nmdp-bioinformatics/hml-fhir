@@ -27,13 +27,10 @@ package org.nmdp.hmlfhir.mapping.fhir;
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
 import org.nmdp.hmlfhir.mapping.Distinct;
-import org.nmdp.hmlfhirconvertermodels.domain.fhir.Identifier;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.SbtNgs;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.SbtNgss;
-import org.nmdp.hmlfhirconvertermodels.dto.Hml;
-import org.nmdp.hmlfhirconvertermodels.dto.Sample;
-import org.nmdp.hmlfhirconvertermodels.dto.Typing;
-import org.nmdp.hmlfhirconvertermodels.dto.TypingMethod;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Typing;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.TypingMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +51,7 @@ public class SbtNgsMap implements Converter<Typing, SbtNgss> {
         SbtNgs sbtNgs = new SbtNgs();
         TypingMethod typingMethod = typing.getTypingMethod();
 
-        for (org.nmdp.hmlfhirconvertermodels.dto.SbtNgs nmdpSbtNgs : typingMethod.getSbtNgs()) {
+        for (org.nmdp.hmlfhirconvertermodels.dto.hml.SbtNgs nmdpSbtNgs : typingMethod.getSbtNgs()) {
             sbtNgs.setLocus(nmdpSbtNgs.getLocus());
             sbtNgsList.add(sbtNgs);
         }

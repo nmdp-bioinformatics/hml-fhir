@@ -28,7 +28,7 @@ import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
-import org.nmdp.hmlfhirconvertermodels.dto.Hml;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Hml;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage;
 
 public interface ConvertFhirToHml {

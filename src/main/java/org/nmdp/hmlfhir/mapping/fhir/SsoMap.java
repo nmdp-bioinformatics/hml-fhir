@@ -29,10 +29,10 @@ import org.modelmapper.spi.MappingContext;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Identifier;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Sso;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Ssos;
-import org.nmdp.hmlfhirconvertermodels.dto.Hml;
-import org.nmdp.hmlfhirconvertermodels.dto.Sample;
-import org.nmdp.hmlfhirconvertermodels.dto.Typing;
-import org.nmdp.hmlfhirconvertermodels.dto.TypingMethod;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Hml;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Sample;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Typing;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.TypingMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +61,7 @@ public class SsoMap implements Converter<Hml, Ssos> {
             for (Typing typing : typings) {
                 Sso sso = new Sso();
                 TypingMethod typingMethod = typing.getTypingMethod();
-                org.nmdp.hmlfhirconvertermodels.dto.Sso nmdpSso = typingMethod.getSso();
+                org.nmdp.hmlfhirconvertermodels.dto.hml.Sso nmdpSso = typingMethod.getSso();
 
                 sso.setLocus(nmdpSso.getLocus());
                 sso.setIdentifier(identifier);

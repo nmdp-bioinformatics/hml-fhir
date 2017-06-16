@@ -30,7 +30,7 @@ import org.nmdp.hmlfhir.mapping.Distinct;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Haploid;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Haploids;
-import org.nmdp.hmlfhirconvertermodels.dto.*;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.*;
 import org.nmdp.hmlfhirconvertermodels.lists.Samples;
 
 import java.util.ArrayList;

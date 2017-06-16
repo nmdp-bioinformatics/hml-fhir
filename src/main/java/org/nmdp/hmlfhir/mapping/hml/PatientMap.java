@@ -30,8 +30,8 @@ import org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirDefinedType;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Identifier;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Patient;
-import org.nmdp.hmlfhirconvertermodels.dto.Hml;
-import org.nmdp.hmlfhirconvertermodels.dto.HmlId;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Hml;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.HmlId;
 
 public class PatientMap implements Converter<FhirMessage, Hml> {
 

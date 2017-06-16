@@ -27,7 +27,7 @@ package org.nmdp.hmlfhir.deserialization;
 import com.google.gson.*;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.nmdp.hmlfhirconvertermodels.dto.*;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.*;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

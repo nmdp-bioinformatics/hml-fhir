@@ -38,8 +38,8 @@ import org.nmdp.hmlfhir.mapping.hml.*;
 import org.nmdp.hmlfhir.mapping.object.HmlMessageToHml;
 import org.nmdp.hmlfhirconvertermodels.HmlMessage;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage;
-import org.nmdp.hmlfhirconvertermodels.dto.Hml;
-import org.nmdp.hmlfhirconvertermodels.dto.HmlId;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Hml;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.HmlId;
 import org.nmdp.hmlfhirconvertermodels.lists.*;
 
 public class ConvertFhirToHmlImpl extends Convert implements ConvertFhirToHml {

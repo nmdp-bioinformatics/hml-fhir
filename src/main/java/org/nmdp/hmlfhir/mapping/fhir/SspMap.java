@@ -29,10 +29,10 @@ import org.modelmapper.spi.MappingContext;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Identifier;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Ssp;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Ssps;
-import org.nmdp.hmlfhirconvertermodels.dto.Hml;
-import org.nmdp.hmlfhirconvertermodels.dto.Sample;
-import org.nmdp.hmlfhirconvertermodels.dto.Typing;
-import org.nmdp.hmlfhirconvertermodels.dto.TypingMethod;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Hml;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Sample;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Typing;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.TypingMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +61,7 @@ public class SspMap implements Converter<Hml, Ssps> {
             for (Typing typing : typings) {
                 Ssp ssp = new Ssp();
                 TypingMethod typingMethod = typing.getTypingMethod();
-                org.nmdp.hmlfhirconvertermodels.dto.Ssp nmdpSsp = typingMethod.getSsp();
+                org.nmdp.hmlfhirconvertermodels.dto.hml.Ssp nmdpSsp = typingMethod.getSsp();
 
                 ssp.setLocus(nmdpSsp.getLocus());
                 ssp.setIdentifier(identifier);

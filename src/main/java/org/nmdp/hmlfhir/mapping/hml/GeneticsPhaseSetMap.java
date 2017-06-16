@@ -29,7 +29,7 @@ import org.modelmapper.spi.MappingContext;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.GeneticsPhaseSet;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.GeneticsPhaseSets;
-import org.nmdp.hmlfhirconvertermodels.dto.*;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.*;
 import org.nmdp.hmlfhirconvertermodels.lists.Samples;
 
 import java.util.ArrayList;

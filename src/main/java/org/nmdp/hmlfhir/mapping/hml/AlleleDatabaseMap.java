@@ -26,16 +26,11 @@ package org.nmdp.hmlfhir.mapping.hml;
 
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
-import org.nmdp.hmlfhirconvertermodels.domain.fhir.AlleleDatabase;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage;
-import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.AlleleDatabases;
-import org.nmdp.hmlfhirconvertermodels.dto.AlleleAssignment;
-import org.nmdp.hmlfhirconvertermodels.dto.Sample;
-import org.nmdp.hmlfhirconvertermodels.dto.Typing;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Sample;
 import org.nmdp.hmlfhirconvertermodels.lists.Samples;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class AlleleDatabaseMap implements Converter<FhirMessage, Samples> {

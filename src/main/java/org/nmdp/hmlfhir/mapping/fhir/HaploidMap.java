@@ -31,10 +31,10 @@ import org.nmdp.hmlfhir.mapping.Distinct;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Haploid;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.Identifier;
 import org.nmdp.hmlfhirconvertermodels.domain.fhir.lists.Haploids;
-import org.nmdp.hmlfhirconvertermodels.dto.AlleleAssignment;
-import org.nmdp.hmlfhirconvertermodels.dto.Hml;
-import org.nmdp.hmlfhirconvertermodels.dto.Sample;
-import org.nmdp.hmlfhirconvertermodels.dto.Typing;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.AlleleAssignment;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Hml;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Sample;
+import org.nmdp.hmlfhirconvertermodels.dto.hml.Typing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,8 +55,8 @@ public class HaploidMap implements Converter<Typing, Haploids> {
 
         List<AlleleAssignment> alleleAssignments = typing.getAlleleAssignment();
         for (AlleleAssignment alleleAssignment : alleleAssignments) {
-            List<org.nmdp.hmlfhirconvertermodels.dto.Haploid> nmdpHaploids = alleleAssignment.getHaploid();
-            for (org.nmdp.hmlfhirconvertermodels.dto.Haploid haploid : nmdpHaploids) {
+            List<org.nmdp.hmlfhirconvertermodels.dto.hml.Haploid> nmdpHaploids = alleleAssignment.getHaploid();
+            for (org.nmdp.hmlfhirconvertermodels.dto.hml.Haploid haploid : nmdpHaploids) {
                 Haploid fhirHaploid = new Haploid();
 
                 fhirHaploid.setLocus(haploid.getLocus());
