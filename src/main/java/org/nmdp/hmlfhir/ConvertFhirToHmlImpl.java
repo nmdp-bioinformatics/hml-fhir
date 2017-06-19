@@ -37,7 +37,7 @@ import org.nmdp.hmlfhir.deserialization.Deserializer;
 import org.nmdp.hmlfhir.mapping.hml.*;
 import org.nmdp.hmlfhir.mapping.object.HmlMessageToHml;
 import org.nmdp.hmlfhirconvertermodels.HmlMessage;
-import org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage;
+import org.nmdp.hmlfhirconvertermodels.dto.fhir.FhirMessage;
 import org.nmdp.hmlfhirconvertermodels.dto.hml.Hml;
 import org.nmdp.hmlfhirconvertermodels.dto.hml.HmlId;
 import org.nmdp.hmlfhirconvertermodels.lists.*;
@@ -127,6 +127,37 @@ public class ConvertFhirToHmlImpl extends Convert implements ConvertFhirToHml {
     public FhirMessage toDto(JsonObject fhir) {
         Gson gson = getGsonConverter();
         return gson.fromJson(fhir, FhirMessage.class);
+    }
+
+    @Override
+    public org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage toDomain(JSONObject fhir, String prefix) {
+        JsonParser parser = new JsonParser();
+        Gson gson = getGsonConverter();
+
+        if (prefix != null) {
+            fhir = mutatePropertyNames(fhir, prefix);
+        }
+
+        Object obj = parser.parse(fhir.toString());
+        JsonObject json = (JsonObject) obj;
+        return gson.fromJson(json, org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage.class);
+    }
+
+    @Override
+    public org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage toDomain(JsonObject fhir) {
+        Gson gson = getGsonConverter();
+        return gson.fromJson(fhir, org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage.class);
+    }
+
+    @Override
+    public org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage toDomain(String fhir, String prefix) throws Exception{
+        try {
+            JSONObject jsonObj = convertXmlStringToJson(fhir);
+            return toDomain(jsonObj, prefix);
+        } catch (Exception ex) {
+            LOG.error(ex);
+            throw ex;
+        }
     }
 
     private Hml toHml(FhirMessage fhir) {

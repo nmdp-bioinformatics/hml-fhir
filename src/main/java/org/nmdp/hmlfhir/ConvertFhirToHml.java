@@ -29,7 +29,7 @@ import com.google.gson.JsonObject;
 import org.json.JSONObject;
 
 import org.nmdp.hmlfhirconvertermodels.dto.hml.Hml;
-import org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage;
+import org.nmdp.hmlfhirconvertermodels.dto.fhir.FhirMessage;
 
 public interface ConvertFhirToHml {
     Hml convert(FhirMessage fhir) throws Exception;
@@ -39,4 +39,7 @@ public interface ConvertFhirToHml {
     FhirMessage toDto(JSONObject fhir, String prefix);
     FhirMessage toDto(JsonObject fhir);
     FhirMessage toDto(String fhir, String prefix) throws Exception;
+    org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage toDomain(JSONObject fhir, String prefix);
+    org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage toDomain(JsonObject fhir);
+    org.nmdp.hmlfhirconvertermodels.domain.fhir.FhirMessage toDomain(String fhir, String prefix) throws Exception;
 }
