@@ -41,10 +41,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
 
         Hml hml = new Hml();
 
-        hml.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        hml.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        hml.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        hml.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        hml.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        hml.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        hml.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        hml.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         hml.setHmlId(createHmlId(jsonObject.has("hmlId") ? jsonObject.get("hmlId").getAsJsonObject() : null));
         hml.setVersion(handleVersion(jsonObject.has("version") ? jsonObject.get("version") : null));
         hml.setProject(createProject(jsonObject.has("project") ? jsonObject.get("project").getAsJsonObject() : null));
@@ -56,6 +56,38 @@ public class HmlDeserializer extends Deserializer<Hml> {
         return hml;
     }
 
+    private Boolean handleActive(JsonObject json) {
+        if (json.get("active") instanceof JsonNull) {
+            return null;
+        }
+
+        return Boolean.parseBoolean(json.get("active").getAsString());
+    }
+    
+    private Date handleDateCreated(JsonObject json) {
+        if (json.get("dateCreated") instanceof JsonNull) {
+            return null;
+        }
+
+        return new Date(json.get("dateCreated").getAsString());
+    }
+
+    private Date handleDateUpdated(JsonObject json) {
+        if (json.get("dateUpdated") instanceof JsonNull) {
+            return null;
+        }
+
+        return new Date(json.get("dateUpdated").getAsString());
+    }
+    
+    private String handleId(JsonObject json) {
+        if (json.get("id") instanceof JsonNull) {
+            return null;
+        }
+        
+        return json.get("id").getAsString();
+    }
+
     private Version handleVersion(Object object) {
         Version version = new Version();
 
@@ -65,7 +97,7 @@ public class HmlDeserializer extends Deserializer<Hml> {
 
         if (object instanceof JsonObject) {
             JsonObject json = (JsonObject) object;
-            version = createVersion(json.has("name") ? json.get("name").getAsString() : null);
+            version = createVersion(json.has("name") ? json.get("name") instanceof JsonNull ? null : json.get("name").getAsString() : null);
         } else if (object instanceof String) {
             version = createVersion((String)object);
         }
@@ -91,10 +123,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return hmlId;
         }
 
-        hmlId.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        hmlId.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        hmlId.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        hmlId.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        hmlId.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        hmlId.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        hmlId.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        hmlId.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         hmlId.setExtension(jsonObject.has("extension") ? jsonObject.get("extension").getAsString() : null);
         hmlId.setRootName(jsonObject.has("rootName") ? jsonObject.get("rootName").getAsString() : null);
 
@@ -108,10 +140,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return project;
         }
 
-        project.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        project.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        project.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        project.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        project.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        project.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        project.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        project.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         project.setDescription(jsonObject.has("description") ? jsonObject.get("description").getAsString() : null);
         project.setName(jsonObject.has("name") ? jsonObject.get("name").getAsString() : null);
 
@@ -143,9 +175,9 @@ public class HmlDeserializer extends Deserializer<Hml> {
         }
 
         sample.setId(jsonObject.has("_id") ? jsonObject.get("_id").getAsString() : null);
-        sample.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        sample.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        sample.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        sample.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        sample.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        sample.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         sample.setCenterCode(jsonObject.has("centerCode") ? jsonObject.get("centerCode").getAsString() : null);
         sample.setSampleId(jsonObject.has("sampleId") ? jsonObject.get("sampleId").getAsString() : null);
         sample.setTyping(handleTyping(jsonObject.has("typing") ? jsonObject.get("typing") : null));
@@ -209,10 +241,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return properties;
         }
 
-        property.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        property.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        property.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        property.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        property.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        property.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        property.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        property.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         property.setDescription(jsonObject.has("description") ? jsonObject.get("description").getAsString() : null);
         property.setName(jsonObject.has("name") ? jsonObject.get("name").getAsString() : null);
         property.setValue(jsonObject.has("value") ? jsonObject.get("value").getAsString() : null);
@@ -260,10 +292,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return reportingCenters;
         }
 
-        reportingCenter.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        reportingCenter.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        reportingCenter.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        reportingCenter.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        reportingCenter.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        reportingCenter.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        reportingCenter.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        reportingCenter.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         reportingCenter.setContext(jsonObject.has("context") ? jsonObject.get("context").getAsString() : null);
         reportingCenter.setCenterId(jsonObject.has("centerId") ? jsonObject.get("centerId").getAsString() : null);
 
@@ -279,10 +311,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return typingTestNames;
         }
 
-        typingTestName.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        typingTestName.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        typingTestName.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        typingTestName.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        typingTestName.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        typingTestName.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        typingTestName.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        typingTestName.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         typingTestName.setDescription(jsonObject.has("description") ? jsonObject.get("description").getAsString() : null);
         typingTestName.setName(jsonObject.has("name") ? jsonObject.get("name").getAsString() : null);
 
@@ -298,10 +330,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return extendedItems;
         }
 
-        extendedItem.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        extendedItem.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        extendedItem.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        extendedItem.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        extendedItem.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        extendedItem.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        extendedItem.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        extendedItem.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         extendedItem.setItem(jsonObject.has("item") ? jsonObject.get("item").getAsJsonObject() : null);
 
         extendedItems.add(extendedItem);
@@ -346,10 +378,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return typingList;
         }
 
-        typing.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        typing.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        typing.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        typing.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        typing.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        typing.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        typing.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        typing.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         typing.setDate(jsonObject.has("date") ? new Date(jsonObject.get("date").getAsString()) : null);
         typing.setGeneFamily(jsonObject.has("geneFamily") ? jsonObject.get("geneFamily").getAsString() : null);
         typing.setTypingMethod(createTypingMethod(jsonObject.has("typingMethod") ? jsonObject.get("typingMethod").getAsJsonObject() : null));
@@ -369,10 +401,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return consensusSequence;
         }
 
-        consensusSequence.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        consensusSequence.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        consensusSequence.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        consensusSequence.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        consensusSequence.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        consensusSequence.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        consensusSequence.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        consensusSequence.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         consensusSequence.setDate(jsonObject.has("date") ? new Date(jsonObject.get("date").getAsString()) : null);
         consensusSequence.setReferenceDatabase(handleReferenceDatabase(jsonObject.has("referenceDatabase") ? jsonObject.get("referenceDatabase") : null));
         consensusSequence.setConsensusSequenceBlocks(handleConsensusSequenceBlocks(jsonObject.has("consensusSequenceBlocks") ? jsonObject.get("consensusSequenceBlocks") : null));
@@ -418,11 +450,11 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return  consensusSequenceBlockList;
         }
 
-        consensusSequenceBlock.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        consensusSequenceBlock.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
+        consensusSequenceBlock.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        consensusSequenceBlock.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
         consensusSequenceBlock.setContinuity(jsonObject.has("continuity") ? jsonObject.get("continuity").getAsBoolean() : null);
-        consensusSequenceBlock.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        consensusSequenceBlock.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        consensusSequenceBlock.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        consensusSequenceBlock.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         consensusSequenceBlock.setDescription(jsonObject.has("description") ? jsonObject.get("description").getAsString() : null);
         consensusSequenceBlock.setEnd(jsonObject.has("end") ? jsonObject.get("end").getAsInt() : null);
         consensusSequenceBlock.setExpectedCopyNumber(jsonObject.has("expectedCopyNumber") ? jsonObject.get("expectedCopyNumber").getAsInt() : null);
@@ -447,10 +479,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return variant;
         }
 
-        variant.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        variant.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        variant.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        variant.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        variant.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        variant.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        variant.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        variant.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         variant.setAlternateBases(jsonObject.has("alternateBases") ? jsonObject.get("alternateBases").getAsString() : null);
         variant.setAnyAttribute(jsonObject.has("anyAttribute") ? jsonObject.get("anyAttribute").getAsJsonObject() : null);
         variant.setEnd(jsonObject.has("end") ? jsonObject.get("end").getAsInt() : null);
@@ -473,10 +505,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return variantEffect;
         }
 
-        variantEffect.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        variantEffect.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        variantEffect.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        variantEffect.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        variantEffect.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        variantEffect.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        variantEffect.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        variantEffect.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         variantEffect.setAnyAttribute(jsonObject.has("anyAttribute") ? jsonObject.get("anyAttribute").getAsJsonObject() : null);
         variantEffect.setHgvs(jsonObject.has("hgvs") ? jsonObject.get("hgvs").getAsString() : null);
         variantEffect.setTerm(jsonObject.has("term") ? jsonObject.get("term").getAsString() : null);
@@ -492,10 +524,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return  sequenceQuality;
         }
 
-        sequenceQuality.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        sequenceQuality.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        sequenceQuality.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        sequenceQuality.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        sequenceQuality.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        sequenceQuality.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        sequenceQuality.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        sequenceQuality.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         sequenceQuality.setQualityScore(jsonObject.has("qualityScore") ? jsonObject.get("qualityScore").getAsString() : null);
         sequenceQuality.setSequenceEnd(jsonObject.has("sequenceEnd") ? jsonObject.get("sequenceEnd").getAsInt() : null);
         sequenceQuality.setSequenceStart(jsonObject.has("sequenceStart") ? jsonObject.get("sequenceStart").getAsInt() : null);
@@ -541,10 +573,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return  referenceDatabases;
         }
 
-        referenceDatabase.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        referenceDatabase.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        referenceDatabase.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        referenceDatabase.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        referenceDatabase.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        referenceDatabase.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        referenceDatabase.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        referenceDatabase.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
 
         referenceDatabases.add(referenceDatabase);
 
@@ -589,10 +621,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return alleleAssignments;
         }
 
-        alleleAssignment.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        alleleAssignment.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        alleleAssignment.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        alleleAssignment.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        alleleAssignment.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        alleleAssignment.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        alleleAssignment.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        alleleAssignment.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         alleleAssignment.setDate(jsonObject.has("date") ? new Date(jsonObject.get("date").getAsString()) : null);
         alleleAssignment.setAlleleDb(jsonObject.has("alleleDb") ? jsonObject.get("alleleDb").getAsString() : null);
         alleleAssignment.setAlleleVersion(jsonObject.has("alleleVersion") ? jsonObject.get("alleleVersion").getAsString() : null);
@@ -613,10 +645,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return glstring;
         }
 
-        glstring.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        glstring.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        glstring.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        glstring.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        glstring.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        glstring.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        glstring.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        glstring.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         glstring.setValue(jsonObject.has("value") ? jsonObject.get("value").getAsString() : null);
         glstring.setUri(jsonObject.has("uri") ? jsonObject.get("uri").getAsString() : null);
 
@@ -661,10 +693,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return haploids;
         }
 
-        haploid.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        haploid.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        haploid.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        haploid.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        haploid.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        haploid.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        haploid.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        haploid.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         haploid.setLocus(jsonObject.has("locus") ? jsonObject.get("locus").getAsString() : null);
         haploid.setMethod(jsonObject.has("method") ? jsonObject.get("method").getAsString() : null);
         haploid.setType(jsonObject.has("type") ? jsonObject.get("type").getAsString() : null);
@@ -712,10 +744,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return  genotypes;
         }
 
-        genotype.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        genotype.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        genotype.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        genotype.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        genotype.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        genotype.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        genotype.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        genotype.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         genotype.setDiploidCombinations(createDiploidCombinations(jsonObject.has("diploidCombination") ? jsonObject.get("diploidCombination").getAsJsonObject() : null));
 
         genotypes.add(genotype);
@@ -730,10 +762,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return diploidCombinations;
         }
 
-        diploidCombination.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        diploidCombination.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        diploidCombination.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        diploidCombination.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        diploidCombination.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        diploidCombination.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        diploidCombination.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        diploidCombination.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         diploidCombination.setLocusBlock(createLocusBlock(jsonObject.has("locusBlock") ? jsonObject.get("locusBlock").getAsJsonObject() : null));
 
         diploidCombinations.add(diploidCombination);
@@ -747,10 +779,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return locusBlock;
         }
 
-        locusBlock.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        locusBlock.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        locusBlock.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        locusBlock.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        locusBlock.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        locusBlock.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        locusBlock.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        locusBlock.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         locusBlock.setAlleles(createAlleles(jsonObject.has("alleleList") ? jsonObject.get("alleleList").getAsJsonObject() : null));
 
         return locusBlock;
@@ -764,10 +796,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return alleles;
         }
 
-        allele.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        allele.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        allele.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        allele.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        allele.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        allele.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        allele.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        allele.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         allele.setName(jsonObject.has("name") ? jsonObject.get("name").getAsString() : null);
         allele.setPresent(jsonObject.has("present") ? jsonObject.get("present").getAsString() : null);
 
@@ -782,10 +814,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return typingMethod;
         }
 
-        typingMethod.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        typingMethod.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        typingMethod.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        typingMethod.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        typingMethod.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        typingMethod.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        typingMethod.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        typingMethod.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         typingMethod.setSbtSanger(createSbtSanger(jsonObject.has("sbtSanger") ? jsonObject.get("sbtSanger").getAsJsonObject() : null));
         typingMethod.setSbtNgs(handleSbtNgs(jsonObject.has("sbtNgs") ? jsonObject.get("sbtNgs") : null));
         typingMethod.setSso(createSso(jsonObject.has("sso") ? jsonObject.get("sso").getAsJsonObject() : null));
@@ -832,10 +864,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return sbtNgsList;
         }
 
-        sbtNgs.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        sbtNgs.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        sbtNgs.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        sbtNgs.setDateUpdated(jsonObject.has("dateUupdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        sbtNgs.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        sbtNgs.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        sbtNgs.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        sbtNgs.setDateUpdated(jsonObject.has("dateUupdated") ? handleDateUpdated(jsonObject) : null);
         sbtNgs.setLocus(jsonObject.has("locus") ? jsonObject.get("locus").getAsString() : null);
         sbtNgs.setProperties(createProperties(jsonObject.has("property") ? jsonObject.get("property").getAsJsonObject() : null));
         sbtNgs.setRawReads(handleRawReads(jsonObject.has("rawReads") ? jsonObject.get("rawReads") : null));
@@ -885,10 +917,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return rawReads;
         }
 
-        rawRead.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        rawRead.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        rawRead.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        rawRead.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        rawRead.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        rawRead.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        rawRead.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        rawRead.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         rawRead.setAdapterTrimmed(jsonObject.has("adapterTrimmed") ? jsonObject.get("adapterTrimmed").getAsBoolean() : null);
         rawRead.setAvailability(jsonObject.has("availability") ? jsonObject.get("availability").getAsString() : null);
         rawRead.setFormat(jsonObject.has("format") ? jsonObject.get("format").getAsString() : null);
@@ -908,10 +940,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return sso;
         }
 
-        sso.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        sso.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        sso.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        sso.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        sso.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        sso.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        sso.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        sso.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         sso.setLocus(jsonObject.has("locus") ? jsonObject.get("locus").getAsString() : null);
         sso.setTestId(jsonObject.has("testId") ? jsonObject.get("testId").getAsString() : null);
         sso.setTestIdSource(jsonObject.has("testIdSource") ? jsonObject.get("testIdSource").getAsString() : null);
@@ -927,10 +959,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return ssp;
         }
 
-        ssp.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        ssp.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        ssp.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        ssp.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        ssp.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        ssp.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        ssp.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        ssp.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         ssp.setLocus(jsonObject.has("locus") ? jsonObject.get("locus").getAsString() : null);
         ssp.setScores(jsonObject.has("scores") ? jsonObject.get("scores").getAsString() : null);
         ssp.setTestId(jsonObject.has("testId") ? jsonObject.get("testId").getAsString() : null);
@@ -947,10 +979,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return  sbtSanger;
         }
 
-        sbtSanger.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        sbtSanger.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        sbtSanger.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        sbtSanger.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        sbtSanger.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        sbtSanger.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        sbtSanger.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        sbtSanger.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         sbtSanger.setLocus(jsonObject.has("locus") ? jsonObject.get("locus").getAsString() : null);
         sbtSanger.setTestId(jsonObject.has("testId") ? jsonObject.get("testId").getAsString() : null);
         sbtSanger.setTestIdSource(jsonObject.has("testIdSource") ? jsonObject.get("testIdSource").getAsString() : null);
@@ -969,10 +1001,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return amplification;
         }
 
-        amplification.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        amplification.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        amplification.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        amplification.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        amplification.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        amplification.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        amplification.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        amplification.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         amplification.setRegisteredName(jsonObject.has("registeredName") ? jsonObject.get("registeredName").getAsString() : null);
         amplification.setSequence(handleSequence(jsonObject.has("sequence") ? jsonObject.get("sequence") : null));
 
@@ -986,10 +1018,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return subAmplification;
         }
 
-        subAmplification.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        subAmplification.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        subAmplification.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        subAmplification.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        subAmplification.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        subAmplification.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        subAmplification.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        subAmplification.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         subAmplification.setRegisteredName(jsonObject.has("registeredName") ? jsonObject.get("registeredName").getAsString() : null);
         subAmplification.setSequence(handleSequence(jsonObject.has("sequence") ? jsonObject.get("sequence") : null));
 
@@ -1003,10 +1035,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return gssp;
         }
 
-        gssp.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        gssp.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        gssp.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        gssp.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        gssp.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        gssp.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        gssp.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        gssp.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         gssp.setRegisteredName(jsonObject.has("registeredName") ? jsonObject.get("registeredName").getAsString() : null);
         gssp.setPrimerTarget(jsonObject.has("primerTarget") ? jsonObject.get("primerTarget").getAsString() : null);
         gssp.setPrimerSequence(jsonObject.has("primerSequence") ? jsonObject.get("primerSequence").getAsString() : null);
@@ -1038,10 +1070,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return sequence;
         }
 
-        sequence.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        sequence.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        sequence.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        sequence.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        sequence.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        sequence.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        sequence.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        sequence.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         sequence.setSequence(jsonObject.has("sequence") ? jsonObject.get("sequence").getAsString() : null);
         sequence.setIupacBases(handleIupacBases(jsonObject.has("iupacBases") ? jsonObject.get("iupacBases") : null));
 
@@ -1098,10 +1130,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return iupacBases;
         }
 
-        iupacBase.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        iupacBase.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        iupacBase.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        iupacBase.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        iupacBase.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        iupacBase.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        iupacBase.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        iupacBase.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         iupacBase.setProperty(jsonObject.has("property") ? jsonObject.get("property").getAsString() : null);
         iupacBase.setValue(jsonObject.has("value") ? jsonObject.get("value").getAsString() : null);
 
@@ -1143,10 +1175,10 @@ public class HmlDeserializer extends Deserializer<Hml> {
             return collectionMethods;
         }
 
-        collectionMethod.setId(jsonObject.has("id") ? jsonObject.get("id").getAsString() : null);
-        collectionMethod.setActive(jsonObject.has("active") ? jsonObject.get("active").getAsBoolean() : null);
-        collectionMethod.setDateCreated(jsonObject.has("dateCreated") ? new Date(jsonObject.get("dateCreated").getAsString()) : null);
-        collectionMethod.setDateUpdated(jsonObject.has("dateUpdated") ? new Date(jsonObject.get("dateUpdated").getAsString()) : null);
+        collectionMethod.setId(jsonObject.has("id") ? handleId(jsonObject) : null);
+        collectionMethod.setActive(jsonObject.has("active") ? handleActive(jsonObject) : null);
+        collectionMethod.setDateCreated(jsonObject.has("dateCreated") ? handleDateCreated(jsonObject) : null);
+        collectionMethod.setDateUpdated(jsonObject.has("dateUpdated") ? handleDateUpdated(jsonObject) : null);
         collectionMethod.setDescription(jsonObject.has("description") ? jsonObject.get("description").getAsString() : null);
         collectionMethod.setName(jsonObject.has("name") ? jsonObject.get("name").getAsString() : null);
 
